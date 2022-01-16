@@ -21,7 +21,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        resp.sendRedirect("login/login.jsp");
+        resp.sendRedirect("login.jsp");
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,7 +36,7 @@ public class LoginController extends HttpServlet {
 
         if (!authenticatedUserOptional.isPresent()) {
             req.setAttribute("errorMsg", "Provided username or password is invalid!");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("login/login.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("login.jsp");
             dispatcher.forward(req, resp);
         }
 
@@ -44,9 +44,13 @@ public class LoginController extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
+
+        AuthenticatedUser authenticatedUser = authenticatedUserOptional.get();
         session = req.getSession(true);
-        session.setAttribute("userId", authenticatedUserOptional.get().getUserId());
-        session.setAttribute("username", authenticatedUserOptional.get().getUsername());
+        session.setAttribute("userId", authenticatedUser.getUserId());
+        session.setAttribute("username", authenticatedUser.getUsername());
+        session.setAttribute("firstName", authenticatedUser.getFirstName());
+        session.setAttribute("lastName", authenticatedUser.getLastName());
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
         dispatcher.forward(req, resp);

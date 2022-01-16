@@ -35,7 +35,9 @@ public class UserDAO {
 
         return userStore.stream()
                 .filter(user -> user.getUsername().equals(username) && Arrays.equals(user.getPassword(), password))
-                .findFirst().map(user -> new AuthenticatedUser(user.getUserId(), user.getUsername()));
+                .findFirst()
+                .map(user -> new AuthenticatedUser(user.getUserId(), user.getUsername(), user.getFirstName(),
+                        user.getLastName()));
 
     }
 }

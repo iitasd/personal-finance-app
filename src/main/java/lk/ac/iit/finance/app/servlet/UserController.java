@@ -18,7 +18,7 @@ public class UserController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("register/register.jsp");
+        resp.sendRedirect("register.jsp");
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,8 +33,7 @@ public class UserController extends HttpServlet {
 
         UserDAO.getInstance().registerUser(user);
 
-        req.setAttribute("msg", "User registered successfully!");
-        RequestDispatcher dispatcher = req.getRequestDispatcher("register/register.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("login.jsp");
         dispatcher.forward(req, resp);
     }
 }
