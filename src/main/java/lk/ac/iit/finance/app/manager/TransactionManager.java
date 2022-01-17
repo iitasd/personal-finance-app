@@ -8,14 +8,12 @@ import java.util.List;
 
 public class TransactionManager {
 
-    private final List<Income> incomeList;
-    private final List<Expense> expenseList;
+    private final List<Transaction> transactions;
     private static TransactionManager transactionManager;
 
     private TransactionManager() {
 
-        this.incomeList = new ArrayList<>();
-        this.expenseList = new ArrayList<>();
+        this.transactions = new ArrayList<>();
     }
 
     public static TransactionManager getInstance() {
@@ -37,70 +35,59 @@ public class TransactionManager {
         income.setCategory(category);
         income.setNote(note);
         income.setRecurringState(recurringState);
+        transactions.add(income);
         return income;
     }
 
     public Expense addExpense(double amount, Date date, String note, String userId, ExpenseCategory category,
-                             RecurringState recurringState) {
+                              RecurringState recurringState) {
 
         Expense expense = new Expense(amount, date, userId);
         expense.setCategory(category);
         expense.setNote(note);
         expense.setRecurringState(recurringState);
+        transactions.add(expense);
         return expense;
     }
 
-    public Income getIncome(String id) {
+    public Transaction getTransaction(String id) {
 
-        for (Income income : incomeList) {
-            if (income.getTransactionId().equalsIgnoreCase(id)) {
-                return income;
+        for (Transaction transaction : transactions) {
+            if (transaction.getTransactionId().equalsIgnoreCase(id)) {
+                return transaction;
             }
         }
         return null;
     }
 
-    public Expense getExpense(String id) {
+    public Transaction editTransaction(String transactionId, double amount, Date date, String note,
+                                       ExpenseCategory category, RecurringState recurringState) {
 
-        for (Expense expense : expenseList) {
-            if (expense.getTransactionId().equalsIgnoreCase(id)) {
-                return expense;
-            }
-        }
-        return null;
-    }
-
-    public Income editIncome(String incomeId, double amount, Date date, String note,
-                             ExpenseCategory category, RecurringState recurringState) {
-
-        Income income = this.getIncome(incomeId);
-        if (income != null) {
-            income.setAmount(amount);
-            income.setDate(date);
-            income.setNote(note);
-            income.setCategory(category);
-            income.setRecurringState(recurringState);
-            return income;
+        Transaction transaction = this.getTransaction(transactionId);
+        if (transaction != null) {
+            transaction.setAmount(amount);
+            transaction.setDate(date);
+            transaction.setNote(note);
+            transaction.setCategory(category);
+            transaction.setRecurringState(recurringState);
+            return transaction;
         } else {
-            System.out.printf("No income found with given ID");
+            System.out.println("No transaction found with given ID: " + transactionId);
             return null;
         }
     }
 
-    public Expense editExpense(String expenseId, double amount, Date date, String note,
-                               ExpenseCategory category, RecurringState recurringState) {
+    public void deleteTransaction(String transactionId) {
 
-        Expense expense = this.getExpense(expenseId);
-        if (expense != null) {
-            expense.setAmount(amount);
-            expense.setDate(date);
-            expense.setNote(note);
-            expense.setCategory(category);
-            expense.setRecurringState(recurringState);
-            return expense;
+        Transaction transaction = this.getTransaction(transactionId);
+        if (transaction != null) {
+            transactions.remove(transaction);
         } else {
-            System.out.printf("No expense found with given ID");
+            System.out.println("No transaction found with given ID: " + transactionId);
         }
-        return null;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 }
