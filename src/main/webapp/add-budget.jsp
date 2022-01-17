@@ -103,7 +103,7 @@
             <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item" href="<%=request.getContextPath()%>/budget">View</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/budgets">View</a>
                     <a class="collapse-item active" href="<%=request.getContextPath()%>/add-budget">Add</a>
                 </div>
             </div>
@@ -201,7 +201,7 @@
                                         request.removeAttribute("msg");
                                     }
                                 %>
-                                <form class="user" action="<%=request.getContextPath()%>/budget" method="post">
+                                <form class="user" action="<%=request.getContextPath()%>/budgets" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-select btn-user" style="width: 100%" name="category">

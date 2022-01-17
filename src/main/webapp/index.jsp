@@ -92,6 +92,20 @@
                 </div>
             </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-percent"></i>
+                <span>Budget</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions:</h6>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/budgets">View</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-budget">Add</a>
+                </div>
+            </div>
+        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">

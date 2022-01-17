@@ -107,7 +107,7 @@
             <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item active" href="<%=request.getContextPath()%>/budget">View</a>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/budgets">View</a>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/add-budget">Add</a>
                 </div>
             </div>

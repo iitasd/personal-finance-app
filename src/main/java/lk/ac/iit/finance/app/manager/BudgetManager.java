@@ -52,11 +52,22 @@ public class BudgetManager {
         return expenseCategory;
     }
 
-    public List<ExpenseCategory> getAllBudget(String userId) {
+    public List<ExpenseCategory> getAllBudgetedCategories(String userId) {
         List<ExpenseCategory> budgetList = new ArrayList<>();
         List<ExpenseCategory> expenseCategoryList = CategoryManager.getInstance().getExpenseCategoryList();
         for (ExpenseCategory expenseCategory : expenseCategoryList) {
             if (expenseCategory.getBudget() != null && expenseCategory.getUserId().equals(userId)) {
+                budgetList.add(expenseCategory);
+            }
+        }
+        return budgetList;
+    }
+
+    public List<ExpenseCategory> getAllNotBudgetedCategories(String userId) {
+        List<ExpenseCategory> budgetList = new ArrayList<>();
+        List<ExpenseCategory> expenseCategoryList = CategoryManager.getInstance().getExpenseCategoryList();
+        for (ExpenseCategory expenseCategory : expenseCategoryList) {
+            if (expenseCategory.getBudget() == null && expenseCategory.getUserId().equals(userId)) {
                 budgetList.add(expenseCategory);
             }
         }
