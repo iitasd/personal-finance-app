@@ -38,16 +38,17 @@ public class TransactionController extends HttpServlet {
             resp.sendRedirect("login.jsp");
             return;
         }
+        String userId = (String) session.getAttribute("userId");
 
         CategoryManager categoryManager = CategoryManager.getInstance();
         String action = req.getServletPath();
         if ("/add-income".equals(action)) {
-            req.setAttribute("categories", categoryManager.getIncomeCategoryList());
+            req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
             req.setAttribute("transactionType", "Income");
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
         } else if ("/add-expense".equals(action)) {
-            req.setAttribute("categories", categoryManager.getExpenseCategoryList());
+            req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
             req.setAttribute("transactionType", "Expense");
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
@@ -90,7 +91,7 @@ public class TransactionController extends HttpServlet {
                     .addExpense(amount, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), note, userId,
                             expenseCategory, recurringState);
             req.setAttribute("msg", "Expense added successfully!");
-            req.setAttribute("categories", categoryManager.getExpenseCategoryList());
+            req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
             req.setAttribute("transactionType", "Expense");
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
@@ -101,7 +102,7 @@ public class TransactionController extends HttpServlet {
                     .addIncome(amount, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), note, userId,
                             incomeCategory, recurringState);
             req.setAttribute("msg", "Income added successfully!");
-            req.setAttribute("categories", categoryManager.getIncomeCategoryList());
+            req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
             req.setAttribute("transactionType", "Income");
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);

@@ -29,6 +29,7 @@ public class CategoryController extends HttpServlet {
             resp.sendRedirect("login.jsp");
             return;
         }
+        String userId = (String) session.getAttribute("userId");
 
         String action = req.getServletPath();
         if ("/add-category".equals(action)) {
@@ -38,8 +39,8 @@ public class CategoryController extends HttpServlet {
 
         CategoryManager categoryManager = CategoryManager.getInstance();
         List<AbstractCategory>  categories = new ArrayList<>();
-        categories.addAll(categoryManager.getIncomeCategoryList());
-        categories.addAll(categoryManager.getExpenseCategoryList());
+        categories.addAll(categoryManager.getIncomeCategoryList(userId));
+        categories.addAll(categoryManager.getExpenseCategoryList(userId));
         req.setAttribute("categories", categories);
         RequestDispatcher dispatcher = req.getRequestDispatcher("categories.jsp");
         dispatcher.forward(req, resp);

@@ -5,7 +5,9 @@ import lk.ac.iit.finance.app.model.ExpenseCategory;
 import lk.ac.iit.finance.app.model.IncomeCategory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryManager {
 
@@ -20,9 +22,8 @@ public class CategoryManager {
 
     }
 
-    public List<IncomeCategory> getIncomeCategoryList() {
-
-        return incomeCategoryList;
+    public List<IncomeCategory> getIncomeCategoryList(String userId) {
+        return incomeCategoryList.stream().filter(e -> e.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
     public void setIncomeCategoryList(List<IncomeCategory> incomeCategoryList) {
@@ -30,9 +31,9 @@ public class CategoryManager {
         this.incomeCategoryList = incomeCategoryList;
     }
 
-    public List<ExpenseCategory> getExpenseCategoryList() {
+    public List<ExpenseCategory> getExpenseCategoryList(String userId) {
 
-        return expenseCategoryList;
+        return expenseCategoryList.stream().filter(e -> e.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
     public void setExpenseCategoryList(List<ExpenseCategory> expenseCategoryList) {

@@ -54,7 +54,7 @@ public class BudgetManager {
 
     public List<ExpenseCategory> getAllBudgetedCategories(String userId) {
         List<ExpenseCategory> budgetList = new ArrayList<>();
-        List<ExpenseCategory> expenseCategoryList = CategoryManager.getInstance().getExpenseCategoryList();
+        List<ExpenseCategory> expenseCategoryList = CategoryManager.getInstance().getExpenseCategoryList(userId);
         for (ExpenseCategory expenseCategory : expenseCategoryList) {
             if (expenseCategory.getBudget() != null && expenseCategory.getUserId().equals(userId)) {
                 budgetList.add(expenseCategory);
@@ -65,7 +65,7 @@ public class BudgetManager {
 
     public List<ExpenseCategory> getAllNotBudgetedCategories(String userId) {
         List<ExpenseCategory> budgetList = new ArrayList<>();
-        List<ExpenseCategory> expenseCategoryList = CategoryManager.getInstance().getExpenseCategoryList();
+        List<ExpenseCategory> expenseCategoryList = CategoryManager.getInstance().getExpenseCategoryList(userId);
         for (ExpenseCategory expenseCategory : expenseCategoryList) {
             if (expenseCategory.getBudget() == null && expenseCategory.getUserId().equals(userId)) {
                 budgetList.add(expenseCategory);
