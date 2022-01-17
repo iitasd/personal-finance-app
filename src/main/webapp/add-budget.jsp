@@ -1,3 +1,5 @@
+<%@ page import="lk.ac.iit.finance.app.model.AbstractCategory" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +80,7 @@
                 </div>
             </div>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-bars"></i>
@@ -89,6 +91,20 @@
                     <h6 class="collapse-header">Actions:</h6>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/categories">List</a>
                     <a class="collapse-item active" href="<%=request.getContextPath()%>/add-category">Add</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-percent"></i>
+                <span>Budget</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions:</h6>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/budget">View</a>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/add-budget">Add</a>
                 </div>
             </div>
         </li>
@@ -150,8 +166,8 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Add Category</h1>
-                <p class="mb-4">Create new category</p>
+                <h1 class="h3 mb-4 text-gray-800">Add Category Budget</h1>
+                <p class="mb-4">Add a budget for a category</p>
 
                 <div class="row">
 
@@ -160,7 +176,7 @@
                         <!-- Circle Buttons -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Category Details</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Category Budget Details</h6>
                             </div>
                             <div class="card-body">
                                 <%
@@ -185,37 +201,37 @@
                                         request.removeAttribute("msg");
                                     }
                                 %>
-                                <form class="user" action="<%=request.getContextPath()%>/categories" method="post">
+                                <form class="user" action="<%=request.getContextPath()%>/budget" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user"
-                                                   id="categoryName" name="categoryName"
-                                                   placeholder="Category Name">
+                                            <select class="form-select btn-user" style="width: 100%" name="category">
+                                                <option selected>Category</option>
+                                                <%
+                                                    if (request.getAttribute("categories") != null) {
+                                                        List<AbstractCategory> categories = (List<AbstractCategory>) request
+                                                                .getAttribute("categories");
+                                                        if (categories.size() > 0) {
+                                                            for (AbstractCategory category : categories) {
+                                                %>
+                                                <option value="<%=category.getCategoryId()%>"><%=category
+                                                        .getCategoryName()%>
+                                                </option>
+                                                <%
+                                                            }
+                                                        }
+                                                        request.removeAttribute("categories");
+                                                    }
+                                                %>
+                                            </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="categoryType"
-                                                       id="categoryTypeRadio1" checked value="Income">
-                                                <label class="form-check-label" for="categoryTypeRadio1">
-                                                    Income
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="categoryType"
-                                                       id="categoryTypeRadio2" value="Expense">
-                                                <label class="form-check-label" for="categoryTypeRadio2">
-                                                    Expense
-                                                </label>
-                                            </div>
+                                            <input type="text" class="form-control form-control-user"
+                                                   id="limitInput"
+                                                   placeholder="Limit" name="limit">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control form-control-user"
-                                               id="categoryDescription" name="categoryDescription"
-                                               placeholder="Description">
-                                    </div>
                                     <button type="submit" class="btn btn-primary btn-user">
-                                        Create
+                                        Add
                                     </button>
                                 </form>
                             </div>
@@ -283,3 +299,4 @@
 </body>
 
 </html>
+

@@ -46,11 +46,11 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Summery -->
+        <!-- Nav Item - Summary -->
         <li class="nav-item active">
             <a class="nav-link" href="index.jsp">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Summery</span></a>
+                <span>Summary</span></a>
         </li>
 
         <!-- Divider -->
@@ -151,7 +151,7 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Financial Summery</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Financial Summary</h1>
                 </div>
 
                 <!-- Content Row -->

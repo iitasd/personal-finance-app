@@ -1,3 +1,7 @@
+<%@ page import="lk.ac.iit.finance.app.model.AbstractCategory" %>
+<%@ page import="java.util.List" %>
+<%@ page import="lk.ac.iit.finance.app.model.ExpenseCategory" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,21 +18,23 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Personal Finance Manager - Dashboard</title>
+    <title>Personal Finance Manager - Transactions</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
-
 <!-- Page Wrapper -->
 <div id="wrapper">
 
@@ -87,11 +93,24 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item" href="<%=request.getContextPath()%>/categories">List</a>
-                    <a class="collapse-item active" href="<%=request.getContextPath()%>/add-category">Add</a>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/categories">List</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-category">Add</a>
                 </div>
             </div>
         </li>
+        <li class="nav-item active">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-percent"></i>
+                <span>Budget</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions:</h6>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/budget">View</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-budget">Add</a>
+                </div>
+            </div>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -150,75 +169,57 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Add Category</h1>
-                <p class="mb-4">Create new category</p>
+                <h1 class="h3 mb-2 text-gray-800">Categories</h1>
+                <p class="mb-4">Manage Monthly Budget</p>
 
-                <div class="row">
-
-                    <div class="col-lg-6">
-
-                        <!-- Circle Buttons -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Category Details</h6>
-                            </div>
-                            <div class="card-body">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Budgeted Categories</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Limit</th>
+                                    <th>Operation</th>
+                                </tr>
+                                </thead>
+                                <tbody>
                                 <%
-                                    if (request.getAttribute("errorMsg") != null) {
+                                    if (request.getAttribute("categories") != null) {
+                                        List<ExpenseCategory> categories = (List<ExpenseCategory>) request
+                                                .getAttribute("categories");
+                                        if (categories.size() > 0) {
+                                            for (ExpenseCategory category : categories) {
                                 %>
-                                <div class="text-center">
-                                    <h2 class="h5 text-danger mb-4"><%=request.getAttribute("errorMsg")%>
-                                    </h2>
-                                </div>
+                                <tr>
+                                    <td><%=category.getCategoryName()%>
+                                    </td>
+                                    <td><%=category.getDescription()%>
+                                    </td>
+                                    <td><%=category.getBudget().getMaxSpending()%>
+                                    </td>
+                                    <th>
+                                        <a href="#" class="btn btn-info btn-circle btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-circle btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </th>
+                                </tr>
                                 <%
-                                        request.removeAttribute("errorMsg");
+                                            }
+                                        }
+                                        request.removeAttribute("categories");
                                     }
                                 %>
-                                <%
-                                    if (request.getAttribute("msg") != null) {
-                                %>
-                                <div class="text-center">
-                                    <h2 class="h5 text-success mb-4"><%=request.getAttribute("msg")%>
-                                    </h2>
-                                </div>
-                                <%
-                                        request.removeAttribute("msg");
-                                    }
-                                %>
-                                <form class="user" action="<%=request.getContextPath()%>/categories" method="post">
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user"
-                                                   id="categoryName" name="categoryName"
-                                                   placeholder="Category Name">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="categoryType"
-                                                       id="categoryTypeRadio1" checked value="Income">
-                                                <label class="form-check-label" for="categoryTypeRadio1">
-                                                    Income
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="categoryType"
-                                                       id="categoryTypeRadio2" value="Expense">
-                                                <label class="form-check-label" for="categoryTypeRadio2">
-                                                    Expense
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control form-control-user"
-                                               id="categoryDescription" name="categoryDescription"
-                                               placeholder="Description">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-user">
-                                        Create
-                                    </button>
-                                </form>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -280,6 +281,14 @@
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+
 </body>
 
 </html>
+

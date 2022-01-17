@@ -55,7 +55,7 @@
         <li class="nav-item">
             <a class="nav-link" href="index.jsp">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Summery</span></a>
+                <span>Summary</span></a>
         </li>
 
         <!-- Divider -->
