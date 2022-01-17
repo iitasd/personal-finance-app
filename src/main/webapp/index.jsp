@@ -88,7 +88,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/categories">List</a>
-                    <a class="collapse-item active" href="<%=request.getContextPath()%>/add-category">Add</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-category">Add</a>
                 </div>
             </div>
         </li>
