@@ -61,6 +61,7 @@ public class UserDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } return Optional.empty();
+        }
+        return Optional.empty();
     }
 }

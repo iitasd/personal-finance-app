@@ -138,7 +138,13 @@
         <li class="nav-item active">
             <a class="nav-link" href="transactions.jsp">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Transactions</span></a>
+                <span>View</span></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="add-transaction.jsp">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Add</span></a>
         </li>
 
         <!-- Divider -->
@@ -704,7 +710,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
+                    <span>Copyright &copy; PF Manager 2022</span>
                 </div>
             </div>
         </footer>

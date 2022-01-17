@@ -64,7 +64,13 @@
         <li class="nav-item">
             <a class="nav-link" href="transactions.jsp">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Transactions</span></a>
+                <span>View</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="add-transaction.jsp">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Add</span></a>
         </li>
 
         <!-- Nav Item - Pages Collapse Menu -->
