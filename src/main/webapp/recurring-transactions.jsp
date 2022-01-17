@@ -1,8 +1,7 @@
 <%@ page import="lk.ac.iit.finance.app.model.AbstractTransaction" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.text.DateFormat" %>
 <%@ page import="lk.ac.iit.finance.app.model.CategoryType" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +78,11 @@
             <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item active" href="<%=request.getContextPath()%>/transactions">List</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/transactions">Completed
+                        Transactions</a>
+                    <a class="collapse-item active"
+                       href="<%=request.getContextPath()%>/recurring-transactions">Recurring Transactions
+                    </a>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/add-income">Add Income</a>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/add-expense">Add Expense</a>
                 </div>
@@ -172,7 +175,7 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">Recurring Transactions</h1>
-                <p class="mb-4">Manage recurring transactions</p>
+                <p class="mb-4">Manage recurring transactions.</p>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
@@ -184,7 +187,7 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th>Start Date</th>
                                     <th>Category</th>
                                     <th>Note</th>
                                     <th>Amount</th>
@@ -197,11 +200,11 @@
                                         List<AbstractTransaction> transactions = (List<AbstractTransaction>) request
                                                 .getAttribute("transactions");
                                         if (transactions.size() > 0) {
-                                            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                                             for (AbstractTransaction transaction : transactions) {
                                 %>
                                 <tr>
-                                    <td><%=dateFormat.format(transaction.getDate())%>
+                                    <td><%=transaction.getDate().format(formatter)%>
                                     </td>
                                     <td><%=transaction.getCategory().getCategoryName()%>
                                     </td>
@@ -211,13 +214,15 @@
                                         if (CategoryType.INCOME.equals(transaction.getCategory().getCategoryType())) {
                                     %>
                                     <td style="color: #1cc88a;">
-                                        <i class="fa fa-plus-square" aria-hidden="true"></i>  <%=transaction.getAmount()%>
+                                        <i class="fa fa-plus-square" aria-hidden="true"></i> <%=transaction
+                                            .getAmount()%>
                                     </td>
                                     <%
                                     } else {
                                     %>
                                     <td style="color: #f6c23e;">
-                                        <i class="fa fa-minus-square" aria-hidden="true"></i>  <%=transaction.getAmount()%>
+                                        <i class="fa fa-minus-square" aria-hidden="true"></i> <%=transaction
+                                            .getAmount()%>
                                     </td>
                                     <%
                                         }
@@ -226,7 +231,7 @@
                                         <a href="#" class="btn btn-info btn-circle btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="<%=request.getContextPath()%>/delete-transaction?transactionId=<%=transaction.getTransactionId()%>" class="btn btn-danger btn-circle btn-sm">
+                                        <a href="#" class="btn btn-danger btn-circle btn-sm">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>
