@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = {"/categories", "/add-category"})
+@WebServlet(urlPatterns = { "/categories", "/add-category", "/delete-category" })
 public class CategoryController extends HttpServlet {
 
     private static final long serialVersionUID = 1130564429969244567L;
@@ -29,16 +29,21 @@ public class CategoryController extends HttpServlet {
             resp.sendRedirect("login.jsp");
             return;
         }
+        CategoryManager categoryManager = CategoryManager.getInstance();
         String userId = (String) session.getAttribute("userId");
 
         String action = req.getServletPath();
         if ("/add-category".equals(action)) {
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-category.jsp");
             dispatcher.forward(req, resp);
+        } else if ("/delete-category".equals(action)) {
+            String categoryId = req.getParameter("categoryId");
+            if (categoryId != null && !categoryId.trim().isEmpty()) {
+                categoryManager.deleteCategory(categoryId, userId);
+            }
         }
 
-        CategoryManager categoryManager = CategoryManager.getInstance();
-        List<AbstractCategory>  categories = new ArrayList<>();
+        List<AbstractCategory> categories = new ArrayList<>();
         categories.addAll(categoryManager.getIncomeCategoryList(userId));
         categories.addAll(categoryManager.getExpenseCategoryList(userId));
         req.setAttribute("categories", categories);

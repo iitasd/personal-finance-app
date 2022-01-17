@@ -5,21 +5,33 @@ import lk.ac.iit.finance.app.model.ExpenseCategory;
 import lk.ac.iit.finance.app.model.IncomeCategory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CategoryManager {
 
+    private static CategoryManager categoryManager;
     public List<IncomeCategory> incomeCategoryList;
     public List<ExpenseCategory> expenseCategoryList;
-    private static CategoryManager categoryManager;
 
     private CategoryManager() {
 
         this.incomeCategoryList = new ArrayList<>();
         this.expenseCategoryList = new ArrayList<>();
 
+    }
+
+    public static CategoryManager getInstance() {
+
+        if (categoryManager == null) {
+            synchronized (CategoryManager.class) {
+                if (categoryManager == null) {
+                    categoryManager = new CategoryManager();
+                }
+            }
+        }
+        return categoryManager;
     }
 
     public List<IncomeCategory> getIncomeCategoryList(String userId) {
@@ -41,18 +53,6 @@ public class CategoryManager {
         this.expenseCategoryList = expenseCategoryList;
     }
 
-    public static CategoryManager getInstance() {
-
-        if (categoryManager == null) {
-            synchronized (CategoryManager.class) {
-                if (categoryManager == null) {
-                    categoryManager = new CategoryManager();
-                }
-            }
-        }
-        return categoryManager;
-    }
-
     public IncomeCategory addIncomeCategory(String categoryName, String description, String userId, boolean isSystem) {
 
         IncomeCategory incomeCategory = new IncomeCategory(categoryName, userId);
@@ -62,8 +62,8 @@ public class CategoryManager {
         return incomeCategory;
     }
 
-    public ExpenseCategory addExpenseCategory(String categoryName, String description, String userId,
-                                              boolean isSystem, Budget budget) {
+    public ExpenseCategory addExpenseCategory(String categoryName, String description, String userId, boolean isSystem,
+            Budget budget) {
 
         ExpenseCategory expenseCategory = new ExpenseCategory(categoryName, userId);
         expenseCategory.setDescription(description);
@@ -94,7 +94,7 @@ public class CategoryManager {
     }
 
     public IncomeCategory updateIncomeCategory(String incomeId, String categoryName, String description,
-                                               boolean isSystem) {
+            boolean isSystem) {
 
         IncomeCategory incomeCategory = this.getIncomeCategory(incomeId);
         if (incomeCategory != null) {
@@ -110,7 +110,7 @@ public class CategoryManager {
     }
 
     public ExpenseCategory updateExpenseCategory(String expenseId, String categoryName, String description,
-                                                 boolean isSystem, Budget budget) {
+            boolean isSystem, Budget budget) {
 
         ExpenseCategory expenseCategory = this.getExpenseCategory(expenseId);
         if (expenseCategory != null) {
@@ -124,5 +124,23 @@ public class CategoryManager {
             return null;
         }
 
+    }
+
+    public void deleteCategory(String categoryId, String userId) {
+
+        Optional<IncomeCategory> incomeCategory = incomeCategoryList.stream()
+                .filter(c -> c.getCategoryId().equals(categoryId) && c.getUserId().equals(userId)).findFirst();
+
+        if (incomeCategory.isPresent()) {
+            incomeCategoryList.remove(incomeCategory.get());
+            return;
+        }
+
+        Optional<ExpenseCategory> expenseCategory = expenseCategoryList.stream()
+                .filter(c -> c.getCategoryId().equals(categoryId) && c.getUserId().equals(userId)).findFirst();
+
+        if (expenseCategory.isPresent()) {
+            expenseCategoryList.remove(expenseCategory.get());
+        }
     }
 }
