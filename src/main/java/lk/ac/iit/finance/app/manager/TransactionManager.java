@@ -51,63 +51,124 @@ public class TransactionManager {
 
     private void processRecursiveTransactions(AbstractRecursiveTransaction recurringTransaction) {
         LocalDate startDate = recurringTransaction.getDate();
-        if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
-            int i = 1;
-            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
-                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
-                income.setCategory(recurringTransaction.getCategory());
-                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
-                income.setNote(note);
-                transactions.add(income);
-                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
-                    //No need to further add transactions. Occurrence count is competed.
-                    break;
+        if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
+            if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    income.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    income.setNote(note);
+                    transactions.add(income);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
                 }
-                i++;
+            } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    income.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    income.setNote(note);
+                    transactions.add(income);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
+                }
+            } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    income.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    income.setNote(note);
+                    transactions.add(income);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
+                }
+            } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    income.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    income.setNote(note);
+                    transactions.add(income);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
+                }
             }
-        } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
-            int i = 1;
-            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
-                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
-                income.setCategory(recurringTransaction.getCategory());
-                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
-                income.setNote(note);
-                transactions.add(income);
-                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
-                    //No need to further add transactions. Occurrence count is competed.
-                    break;
+        } else if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
+            if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    expense.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    expense.setNote(note);
+                    transactions.add(expense);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
                 }
-                i++;
-            }
-        } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
-            int i = 1;
-            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
-                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
-                income.setCategory(recurringTransaction.getCategory());
-                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
-                income.setNote(note);
-                transactions.add(income);
-                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
-                    //No need to further add transactions. Occurrence count is competed.
-                    break;
+            } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    expense.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    expense.setNote(note);
+                    transactions.add(expense);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
                 }
-                i++;
-            }
-        } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
-            int i = 1;
-            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
-                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
-                income.setCategory(recurringTransaction.getCategory());
-                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
-                income.setNote(note);
-                transactions.add(income);
-                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
-                    //No need to further add transactions. Occurrence count is competed.
-                    break;
+            } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    expense.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    expense.setNote(note);
+                    transactions.add(expense);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
                 }
-                i++;
+            } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
+                int i = 1;
+                for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    expense.setCategory(recurringTransaction.getCategory());
+                    String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                    expense.setNote(note);
+                    transactions.add(expense);
+                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                        //No need to further add transactions. Occurrence count is competed.
+                        break;
+                    }
+                    i++;
+                }
             }
         }
+
     }
 
     public Transaction addExpense(double amount, LocalDate date, String note, String userId, ExpenseCategory category,
