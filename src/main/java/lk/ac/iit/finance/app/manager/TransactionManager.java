@@ -1,4 +1,6 @@
-package lk.ac.iit.finance.app.model;
+package lk.ac.iit.finance.app.manager;
+
+import lk.ac.iit.finance.app.model.*;
 
 import java.util.ArrayList;
 import java.util.Date;

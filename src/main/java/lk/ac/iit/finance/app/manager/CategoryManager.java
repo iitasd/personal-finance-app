@@ -1,4 +1,8 @@
-package lk.ac.iit.finance.app.model;
+package lk.ac.iit.finance.app.manager;
+
+import lk.ac.iit.finance.app.model.Budget;
+import lk.ac.iit.finance.app.model.ExpenseCategory;
+import lk.ac.iit.finance.app.model.IncomeCategory;
 
 import java.util.ArrayList;
 import java.util.List;
