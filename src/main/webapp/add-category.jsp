@@ -3,7 +3,11 @@
 <html lang="en">
 
 <head>
-
+    <%
+        if (request.getSession(false) == null || request.getSession(false).getAttribute("userId") == null) {
+            response.sendRedirect("login.jsp");
+        }
+    %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -177,9 +181,9 @@
                                                id="categoryDescription"
                                                placeholder="Description">
                                     </div>
-                                    <a href="" class="btn btn-primary btn-user btn-block">
-                                        Register Account
-                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-user">
+                                    Create
+                                    </button>
                                 </form>
                             </div>
                         </div>
