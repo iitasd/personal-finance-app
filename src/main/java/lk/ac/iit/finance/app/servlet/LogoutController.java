@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/logout")
 public class LogoutController extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8457782753017742517L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

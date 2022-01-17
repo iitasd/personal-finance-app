@@ -8,8 +8,8 @@ import java.util.List;
 
 public class TransactionManager {
 
-    private List<Income> incomeList;
-    private List<Expense> expenseList;
+    private final List<Income> incomeList;
+    private final List<Expense> expenseList;
     private static TransactionManager transactionManager;
 
     private TransactionManager() {
@@ -40,7 +40,7 @@ public class TransactionManager {
         return income;
     }
 
-    public Expense addIncome(double amount, Date date, String note, String userId, ExpenseCategory category,
+    public Expense addExpense(double amount, Date date, String note, String userId, ExpenseCategory category,
                              RecurringState recurringState) {
 
         Expense expense = new Expense(amount, date, userId);
