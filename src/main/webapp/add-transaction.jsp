@@ -20,7 +20,14 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
+    <script type="application/javascript">
+        $('.datepicker').datepicker({
+            format: 'mm-dd-yyyy'
+        });
+    </script>
 </head>
 
 <body id="page-top">
@@ -137,6 +144,7 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-4 text-gray-800">Add Transaction</h1>
+                <p class="mb-4">Create new transaction</p>
 
                 <div class="row">
 
@@ -145,42 +153,89 @@
                         <!-- Circle Buttons -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Add</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Transaction Details</h6>
                             </div>
                             <div class="card-body">
-                                <form class="user">
+                                <%
+                                    if (request.getAttribute("errorMsg") != null) {
+                                %>
+                                <div class="text-center">
+                                    <h2 class="h5 text-danger mb-4"><%=request.getAttribute("errorMsg")%>
+                                    </h2>
+                                </div>
+                                <%
+                                        request.removeAttribute("errorMsg");
+                                    }
+                                %>
+                                <%
+                                    if (request.getAttribute("msg") != null) {
+                                %>
+                                <div class="text-center">
+                                    <h2 class="h5 text-success mb-4"><%=request.getAttribute("msg")%>
+                                    </h2>
+                                </div>
+                                <%
+                                        request.removeAttribute("msg");
+                                    }
+                                %>
+                                <form class="user" action="<%=request.getContextPath()%>/transactions" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-select" aria-label="Type select">
-                                                <option selected>Select Transaction Type</option>
-                                                <option value="true">Income</option>
-                                                <option value="false">Expense</option>
+                                            <select class="form-select btn-user" style="width: 100%" name="category">
+                                                <option selected>Category</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control form-control-user"
-                                                   id="exampleLastName"
-                                                   placeholder="Last Name">
+                                                   id="amountInput"
+                                                   placeholder="Amount" name="amount">
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user"
-                                               id="exampleInputEmail"
-                                               placeholder="Email Address">
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="password" class="form-control form-control-user"
-                                                   id="exampleInputPassword" placeholder="Password">
+                                            <div class="input-group date">
+                                                <input type="text" class="form-control form-control-user"
+                                                       id="datepicker" placeholder="Date" name="date">
+                                            </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="password" class="form-control form-control-user"
-                                                   id="exampleRepeatPassword" placeholder="Repeat Password">
+                                            <input type="text" class="form-control form-control-user"
+                                                   id="noteInput"
+                                                   placeholder="Note" name="note">
                                         </div>
                                     </div>
-                                    <a href="login.html" class="btn btn-primary btn-user btn-block">
-                                        Register Account
-                                    </a>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="recurrentSwitch"
+                                                       name="recurrence">
+                                                <label class="form-check-label" for="recurrentSwitch">Recurrent
+                                                    event</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row recurrence-group">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <select class="form-select btn-user" style="width: 100%" name="frequency">
+                                                <option value="DAILY">Daily</option>
+                                                <option value="WEEKLY">Weekly</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Monthly">Yearly</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control form-control-user"
+                                                   id="occurrenceCount"
+                                                   placeholder="Occurrences" name="occurrences">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-user">
+                                        Create
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -244,6 +299,21 @@
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#datepicker').datepicker();
+        $('.recurrence-group').hide();
+        $('#recurrentSwitch').change(function() {
+            if(this.checked) {
+                $('.recurrence-group').show();
+            } else {
+                $('.recurrence-group').hide();
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
