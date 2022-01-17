@@ -11,7 +11,7 @@ public class Expense extends AbstractTransaction {
 
     public void setCategory(TransactionCategory category) {
 
-        if (category instanceof ExpenseCategory) {
+        if (category instanceof IncomeCategory) {
             throw new IllegalArgumentException("Expected to have an expense category for expense");
         }
         super.setCategory(category);

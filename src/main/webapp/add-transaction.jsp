@@ -1,9 +1,15 @@
+<%@ page import="lk.ac.iit.finance.app.model.AbstractCategory" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
+    <%
+        if (request.getSession(false) == null || request.getSession(false).getAttribute("userId") == null) {
+            response.sendRedirect("login.jsp");
+        }
+    %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -67,9 +73,19 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- Nav Item - Tables -->
         <li class="nav-item active">
-            <a class="nav-link" href="transactions.jsp">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+               aria-expanded="true" aria-controls="collapseOne">
                 <i class="fas fa-fw fa-university"></i>
-                <span>Transactions</span></a>
+                <span>Transactions</span>
+            </a>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions:</h6>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/transactions">List</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-income">Add Income</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-expense">Add Expense</a>
+                </div>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -81,7 +97,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
                     <a class="collapse-item active" href="<%=request.getContextPath()%>/categories">List</a>
-                    <a class="collapse-item" href="add-category.jsp">Add</a>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/add-category">Add</a>
                 </div>
             </div>
         </li>
@@ -143,8 +159,19 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">Add Transaction</h1>
-                <p class="mb-4">Create new transaction</p>
+                <%
+                    if ("Income".equals(request.getAttribute("transactionType"))) {
+                %>
+                <h1 class="h3 mb-4 text-gray-800">Add Income</h1>
+                <p class="mb-4">Create new income</p>
+                <%
+                } else {
+                %>
+                <h1 class="h3 mb-4 text-gray-800">Add Expense</h1>
+                <p class="mb-4">Create new expense</p>
+                <%
+                    }
+                %>
 
                 <div class="row">
 
@@ -183,9 +210,22 @@
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-select btn-user" style="width: 100%" name="category">
                                                 <option selected>Category</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                <%
+                                                    if (request.getAttribute("categories") != null) {
+                                                        List<AbstractCategory> categories = (List<AbstractCategory>) request
+                                                                .getAttribute("categories");
+                                                        if (categories.size() > 0) {
+                                                            for (AbstractCategory category : categories) {
+                                                %>
+                                                <option value="<%=category.getCategoryId()%>"><%=category
+                                                        .getCategoryName()%>
+                                                </option>
+                                                <%
+                                                            }
+                                                        }
+                                                        request.removeAttribute("categories");
+                                                    }
+                                                %>
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
@@ -230,9 +270,11 @@
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control form-control-user"
                                                    id="occurrenceCount"
-                                                   placeholder="Occurrences" name="occurrences">
+                                                   placeholder="Occurrences" name="occurrenceCount">
                                         </div>
                                     </div>
+                                    <input type="hidden" name="transactionType"
+                                           value="<%=request.getAttribute("transactionType")%>">
                                     <button type="submit" class="btn btn-primary btn-user">
                                         Create
                                     </button>
@@ -305,8 +347,8 @@
     $(document).ready(function () {
         $('#datepicker').datepicker();
         $('.recurrence-group').hide();
-        $('#recurrentSwitch').change(function() {
-            if(this.checked) {
+        $('#recurrentSwitch').change(function () {
+            if (this.checked) {
                 $('.recurrence-group').show();
             } else {
                 $('.recurrence-group').hide();

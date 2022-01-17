@@ -15,13 +15,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/categories")
+@WebServlet(urlPatterns = {"/categories", "/add-category"})
 public class CategoryController extends HttpServlet {
 
     private static final long serialVersionUID = 1130564429969244567L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        HttpSession session = req.getSession(false);
+        if (session == null) {
+            System.out.println("No login session found..!!!");
+            resp.sendRedirect("login.jsp");
+            return;
+        }
+
+        String action = req.getServletPath();
+        if ("/add-category".equals(action)) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("add-category.jsp");
+            dispatcher.forward(req, resp);
+        }
+
         CategoryManager categoryManager = CategoryManager.getInstance();
         List<AbstractCategory>  categories = new ArrayList<>();
         categories.addAll(categoryManager.getIncomeCategoryList());

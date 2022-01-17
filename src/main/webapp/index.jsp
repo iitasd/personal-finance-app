@@ -64,9 +64,19 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="transactions.jsp">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+               aria-expanded="true" aria-controls="collapseOne">
                 <i class="fas fa-fw fa-university"></i>
-                <span>Transactions</span></a>
+                <span>Transactions</span>
+            </a>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Actions:</h6>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/transactions">List</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-income">Add Income</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/add-expense">Add Expense</a>
+                </div>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -78,7 +88,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/categories">List</a>
-                    <a class="collapse-item" href="add-category.jsp">Add</a>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/add-category">Add</a>
                 </div>
             </div>
         </li>
