@@ -1,5 +1,6 @@
 package lk.ac.iit.finance.app.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public interface Transaction {
@@ -16,13 +17,9 @@ public interface Transaction {
 
     void setCategory(TransactionCategory category);
 
-    void setDate(Date date);
+    void setDate(LocalDate date);
 
-    Date getDate();
-
-    RecurringState getRecurringPeriod();
-
-    void setRecurringState(RecurringState recurringState);
+    LocalDate getDate();
 
     String getNote();
 

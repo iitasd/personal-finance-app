@@ -2,18 +2,20 @@ package lk.ac.iit.finance.app.manager;
 
 import lk.ac.iit.finance.app.model.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TransactionManager {
 
     private final List<Transaction> transactions;
+    private final List<Transaction> recursiveTransactions;
     private static TransactionManager transactionManager;
 
     private TransactionManager() {
 
         this.transactions = new ArrayList<>();
+        this.recursiveTransactions = new ArrayList<>();
     }
 
     public static TransactionManager getInstance() {
@@ -28,26 +30,103 @@ public class TransactionManager {
         return transactionManager;
     }
 
-    public Income addIncome(double amount, Date date, String note, String userId, IncomeCategory category,
-                            RecurringState recurringState) {
+    public Transaction addIncome(double amount, LocalDate date, String note, String userId, IncomeCategory category,
+                                 RecurringState recurringState) {
 
-        Income income = new Income(amount, date, userId);
-        income.setCategory(category);
-        income.setNote(note);
-        income.setRecurringState(recurringState);
-        transactions.add(income);
-        return income;
+        if (recurringState.isRecurring()) {
+            RecurringIncome recurringIncome = new RecurringIncome(amount, date, userId, recurringState);
+            recurringIncome.setCategory(category);
+            recurringIncome.setNote(note);
+            recursiveTransactions.add(recurringIncome);
+            processRecursiveTransactions(recurringIncome);
+            return recurringIncome;
+        } else {
+            Income income = new Income(amount, date, userId);
+            income.setCategory(category);
+            income.setNote(note);
+            transactions.add(income);
+            return income;
+        }
     }
 
-    public Expense addExpense(double amount, Date date, String note, String userId, ExpenseCategory category,
-                              RecurringState recurringState) {
+    private void processRecursiveTransactions(AbstractRecursiveTransaction recurringTransaction) {
+        LocalDate startDate = recurringTransaction.getDate();
+        if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
+            int i = 1;
+            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
+                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                income.setCategory(recurringTransaction.getCategory());
+                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                income.setNote(note);
+                transactions.add(income);
+                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    //No need to further add transactions. Occurrence count is competed.
+                    break;
+                }
+                i++;
+            }
+        } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
+            int i = 1;
+            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
+                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                income.setCategory(recurringTransaction.getCategory());
+                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                income.setNote(note);
+                transactions.add(income);
+                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    //No need to further add transactions. Occurrence count is competed.
+                    break;
+                }
+                i++;
+            }
+        } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
+            int i = 1;
+            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
+                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                income.setCategory(recurringTransaction.getCategory());
+                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                income.setNote(note);
+                transactions.add(income);
+                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    //No need to further add transactions. Occurrence count is competed.
+                    break;
+                }
+                i++;
+            }
+        } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
+            int i = 1;
+            for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
+                Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                income.setCategory(recurringTransaction.getCategory());
+                String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
+                income.setNote(note);
+                transactions.add(income);
+                if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    //No need to further add transactions. Occurrence count is competed.
+                    break;
+                }
+                i++;
+            }
+        }
+    }
 
-        Expense expense = new Expense(amount, date, userId);
-        expense.setCategory(category);
-        expense.setNote(note);
-        expense.setRecurringState(recurringState);
-        transactions.add(expense);
-        return expense;
+    public Transaction addExpense(double amount, LocalDate date, String note, String userId, ExpenseCategory category,
+                                  RecurringState recurringState) {
+
+        if (recurringState.isRecurring()) {
+            RecurringExpense recurringExpense = new RecurringExpense(amount, date, userId, recurringState);
+            recurringExpense.setCategory(category);
+            recurringExpense.setNote(note);
+            recursiveTransactions.add(recurringExpense);
+            processRecursiveTransactions(recurringExpense);
+            return recurringExpense;
+        } else {
+            Expense expense = new Expense(amount, date, userId);
+            expense.setCategory(category);
+            expense.setNote(note);
+            transactions.add(expense);
+            return expense;
+        }
     }
 
     public Transaction getTransaction(String id) {
@@ -60,22 +139,22 @@ public class TransactionManager {
         return null;
     }
 
-    public Transaction editTransaction(String transactionId, double amount, Date date, String note,
-                                       ExpenseCategory category, RecurringState recurringState) {
+//    public Transaction editTransaction(String transactionId, double amount, Date date, String note,
+//                                       ExpenseCategory category, RecurringState recurringState) {
 
-        Transaction transaction = this.getTransaction(transactionId);
-        if (transaction != null) {
-            transaction.setAmount(amount);
-            transaction.setDate(date);
-            transaction.setNote(note);
-            transaction.setCategory(category);
-            transaction.setRecurringState(recurringState);
-            return transaction;
-        } else {
-            System.out.println("No transaction found with given ID: " + transactionId);
-            return null;
-        }
-    }
+//        Transaction transaction = this.getTransaction(transactionId);
+//        if (transaction != null) {
+//            transaction.setAmount(amount);
+//            transaction.setDate(date);
+//            transaction.setNote(note);
+//            transaction.setCategory(category);
+//            transaction.setRecurringState(recurringState);
+//            return transaction;
+//        } else {
+//            System.out.println("No transaction found with given ID: " + transactionId);
+//            return null;
+//        }
+//    }
 
     public void deleteTransaction(String transactionId) {
 
@@ -89,5 +168,9 @@ public class TransactionManager {
 
     public List<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public List<Transaction> getRecursiveTransactions() {
+        return recursiveTransactions;
     }
 }

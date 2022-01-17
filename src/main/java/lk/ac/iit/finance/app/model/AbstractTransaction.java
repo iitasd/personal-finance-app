@@ -1,17 +1,17 @@
 package lk.ac.iit.finance.app.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
 public class AbstractTransaction implements Transaction {
 
     private Double amount;
-    private Date date;
+    private LocalDate date;
     private TransactionCategory category;
     private String note;
     private String transactionId;
     private String userId;
-    private RecurringState recurringState;
 
     public void setAmount(Double amount) {
 
@@ -38,7 +38,7 @@ public class AbstractTransaction implements Transaction {
         this.note = note;
     }
 
-    public AbstractTransaction(double amount, Date date, String userId) {
+    public AbstractTransaction(double amount, LocalDate date, String userId) {
 
         this.amount = amount;
         this.date = date;
@@ -83,26 +83,14 @@ public class AbstractTransaction implements Transaction {
     }
 
     @Override
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
 
         this.date = date;
     }
 
     @Override
-    public Date getDate() {
+    public LocalDate getDate() {
 
         return this.date;
-    }
-
-    @Override
-    public RecurringState getRecurringPeriod() {
-
-        return this.recurringState;
-    }
-
-    @Override
-    public void setRecurringState(RecurringState recurringState) {
-
-        this.recurringState = recurringState;
     }
 }
