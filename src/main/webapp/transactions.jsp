@@ -1,8 +1,7 @@
 <%@ page import="lk.ac.iit.finance.app.model.AbstractTransaction" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.text.DateFormat" %>
 <%@ page import="lk.ac.iit.finance.app.model.CategoryType" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -187,7 +186,6 @@
                                     <th>Date</th>
                                     <th>Category</th>
                                     <th>Note</th>
-                                    <th>Recurring</th>
                                     <th>Amount</th>
                                     <th>Operation</th>
                                 </tr>
@@ -198,29 +196,29 @@
                                         List<AbstractTransaction> transactions = (List<AbstractTransaction>) request
                                                 .getAttribute("transactions");
                                         if (transactions.size() > 0) {
-                                            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                                             for (AbstractTransaction transaction : transactions) {
                                 %>
                                 <tr>
-                                    <td><%=dateFormat.format(transaction.getDate())%>
+                                    <td><%=transaction.getDate().format(formatter)%>
                                     </td>
                                     <td><%=transaction.getCategory().getCategoryName()%>
                                     </td>
                                     <td><%=transaction.getNote()%>
                                     </td>
-                                    <td><%=transaction.getRecurringPeriod() != null ? "Yes" : "No"%>
-                                    </td>
                                     <%
                                         if (CategoryType.INCOME.equals(transaction.getCategory().getCategoryType())) {
                                     %>
                                     <td style="color: #1cc88a;">
-                                        <i class="fa fa-plus-square" aria-hidden="true"></i>  <%=transaction.getAmount()%>
+                                        <i class="fa fa-plus-square" aria-hidden="true"></i> <%=transaction
+                                            .getAmount()%>
                                     </td>
                                     <%
-                                        } else {
+                                    } else {
                                     %>
                                     <td style="color: #f6c23e;">
-                                        <i class="fa fa-minus-square" aria-hidden="true"></i>  <%=transaction.getAmount()%>
+                                        <i class="fa fa-minus-square" aria-hidden="true"></i> <%=transaction
+                                            .getAmount()%>
                                     </td>
                                     <%
                                         }

@@ -10,7 +10,7 @@ public class AbstractRecursiveTransaction extends AbstractTransaction implements
 
     public AbstractRecursiveTransaction(double amount, LocalDate date, String userId, RecurringState recurringState) {
         super(amount, date, userId);
-        recurringState = recurringState;
+        this.recurringState = recurringState;
     }
 
     @Override
@@ -22,6 +22,6 @@ public class AbstractRecursiveTransaction extends AbstractTransaction implements
     @Override
     public void setRecurringState(RecurringState recurringState) {
 
-        recurringState = recurringState;
+        this.recurringState = recurringState;
     }
 }
