@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = { "/budgets", "/add-budget" })
+@WebServlet(urlPatterns = { "/budgets", "/add-budget", "/delete-budget" })
 public class BudgetController extends HttpServlet {
 
     private static final long serialVersionUID = -3207379419471628611L;
@@ -33,11 +33,15 @@ public class BudgetController extends HttpServlet {
             req.setAttribute("categories", budgetManager.getAllNotBudgetedCategories(userId));
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-budget.jsp");
             dispatcher.forward(req, resp);
-        } else {
-            req.setAttribute("categories", budgetManager.getAllBudgetedCategories(userId));
-            RequestDispatcher dispatcher = req.getRequestDispatcher("budget.jsp");
-            dispatcher.forward(req, resp);
+        } else if ("/delete-budget".equals(action)) {
+            String categoryId = req.getParameter("categoryId");
+            if (categoryId != null && !categoryId.trim().isEmpty()) {
+                budgetManager.deleteBudget(categoryId);
+            }
         }
+        req.setAttribute("categories", budgetManager.getAllBudgetedCategories(userId));
+        RequestDispatcher dispatcher = req.getRequestDispatcher("budget.jsp");
+        dispatcher.forward(req, resp);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

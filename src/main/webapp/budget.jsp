@@ -112,13 +112,13 @@
                 </div>
             </div>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
 
     </ul>
     <!-- End of Sidebar -->
@@ -204,10 +204,8 @@
                                     <td><%=category.getBudget().getMaxSpending()%>
                                     </td>
                                     <th>
-                                        <a href="#" class="btn btn-info btn-circle btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-danger btn-circle btn-sm">
+                                        <a href="<%=request.getContextPath()%>/delete-budget?categoryId=<%=category.getCategoryId()%>"
+                                           class="btn btn-danger btn-circle btn-sm">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </th>
