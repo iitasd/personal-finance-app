@@ -87,9 +87,7 @@ public class TransactionController extends HttpServlet {
         if (transactionType.equalsIgnoreCase(CategoryType.EXPENSE.toString())) {
             ExpenseCategory expenseCategory = CategoryManager.getInstance().getExpenseCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
-            TransactionManager.getInstance()
-                    .addExpense(amount, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), note, userId,
-                            expenseCategory, recurringState);
+            TransactionManager.getInstance().addExpense(amount, date, note, userId, expenseCategory, recurringState);
             req.setAttribute("msg", "Expense added successfully!");
             req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
             req.setAttribute("transactionType", "Expense");
@@ -99,8 +97,7 @@ public class TransactionController extends HttpServlet {
             IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             TransactionManager.getInstance()
-                    .addIncome(amount, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), note, userId,
-                            incomeCategory, recurringState);
+                    .addIncome(amount, date, note, userId, incomeCategory, recurringState);
             req.setAttribute("msg", "Income added successfully!");
             req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
             req.setAttribute("transactionType", "Income");
@@ -116,7 +113,7 @@ public class TransactionController extends HttpServlet {
 
     private RecurringState getRecurringState(boolean isRecurring, String period, int occurrenceCount) {
         if (!isRecurring) {
-            return null;
+            return new RecurringState(false, null, 0);
         } else {
             return new RecurringState(true, RecurringPeriod.fromString(period), occurrenceCount);
         }

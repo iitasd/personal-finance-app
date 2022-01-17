@@ -2,11 +2,11 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
-public class Expense extends AbstractTransaction {
+public class RecurringExpense extends AbstractRecursiveTransaction {
 
-    public Expense(double amount, LocalDate date, String userId) {
+    public RecurringExpense(double amount, LocalDate date, String userId, RecurringState recurringState) {
 
-        super(amount, date, userId);
+        super(amount, date, userId, recurringState);
     }
 
     public void setCategory(TransactionCategory category) {
