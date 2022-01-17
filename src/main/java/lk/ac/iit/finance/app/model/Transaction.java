@@ -4,23 +4,28 @@ import java.util.Date;
 
 public interface Transaction {
 
-    public String getTransactionId();
+    String getTransactionId();
 
-    public String getUserId();
+    String getUserId();
 
-    public void setAmount(double amount);
+    void setAmount(double amount);
 
-    public double getAmount();
+    double getAmount();
 
-    public TransactionCategory getCategory();
+    TransactionCategory getCategory();
 
-    public void setCategory(TransactionCategory category);
+    void setCategory(TransactionCategory category);
 
-    public void setDate(Date date);
+    void setDate(Date date);
 
-    public Date getDate();
+    Date getDate();
 
-    public RecurringState getRecurringPeriod();
+    RecurringState getRecurringPeriod();
 
-    public void setRecurringState(RecurringState recurringState);
+    void setRecurringState(RecurringState recurringState);
+
+    String getNote();
+
+    void setNote(String note) ;
+
 }

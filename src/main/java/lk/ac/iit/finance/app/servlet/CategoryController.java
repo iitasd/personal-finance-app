@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/categories")
 public class CategoryController extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1130564429969244567L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
