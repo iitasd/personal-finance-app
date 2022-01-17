@@ -9,6 +9,7 @@ public abstract class AbstractCategory implements TransactionCategory {
     private boolean isSystem;
     private String categoryId;
     private String userId;
+    private CategoryType categoryType;
 
     public String getCategoryId() {
 
@@ -30,10 +31,11 @@ public abstract class AbstractCategory implements TransactionCategory {
         this.userId = userId;
     }
 
-    public AbstractCategory(String name, String userId) {
+    public AbstractCategory(String name, String userId, CategoryType categoryType) {
 
         this.categoryName = name;
         this.userId = userId;
+        this.categoryType = categoryType;
         this.categoryId = UUID.randomUUID().toString();
     }
 
@@ -67,4 +69,8 @@ public abstract class AbstractCategory implements TransactionCategory {
         this.description = description;
     }
 
+    public CategoryType getCategoryType() {
+
+        return categoryType;
+    }
 }

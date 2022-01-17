@@ -63,7 +63,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- Nav Item - Tables -->
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="transactions.jsp">
                 <i class="fas fa-fw fa-university"></i>
                 <span>Transactions</span></a>
@@ -77,7 +77,7 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item" href="categories.jsp">List</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/categories">List</a>
                     <a class="collapse-item active" href="add-category.jsp">Add</a>
                 </div>
             </div>
@@ -141,6 +141,7 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-4 text-gray-800">Add Category</h1>
+                <p class="mb-4">Create new category</p>
 
                 <div class="row">
 
@@ -152,11 +153,33 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Category Details</h6>
                             </div>
                             <div class="card-body">
+                                <%
+                                    if (request.getAttribute("errorMsg") != null) {
+                                %>
+                                <div class="text-center">
+                                    <h2 class="h5 text-danger mb-4"><%=request.getAttribute("errorMsg")%>
+                                    </h2>
+                                </div>
+                                <%
+                                        request.removeAttribute("errorMsg");
+                                    }
+                                %>
+                                <%
+                                    if (request.getAttribute("msg") != null) {
+                                %>
+                                <div class="text-center">
+                                    <h2 class="h5 text-success mb-4"><%=request.getAttribute("msg")%>
+                                    </h2>
+                                </div>
+                                <%
+                                        request.removeAttribute("msg");
+                                    }
+                                %>
                                 <form class="user" action="<%=request.getContextPath()%>/categories" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="text" class="form-control form-control-user"
-                                                   id="categoryName"
+                                                   id="categoryName" name="categoryName"
                                                    placeholder="Category Name">
                                         </div>
                                         <div class="col-sm-6">
@@ -178,11 +201,11 @@
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control form-control-user"
-                                               id="categoryDescription"
+                                               id="categoryDescription" name="categoryDescription"
                                                placeholder="Description">
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user">
-                                    Create
+                                        Create
                                     </button>
                                 </form>
                             </div>

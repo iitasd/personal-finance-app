@@ -4,4 +4,15 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>categories</servlet-name>-->
+<!--    <url-pattern>/categories.jsp</url-pattern>-->
+<!--  </servlet-mapping>-->
+
+<!--  <servlet>-->
+<!--    <servlet-name>categories</servlet-name>-->
+<!--    <jsp-file>/categories.jsp</jsp-file>-->
+<!--  </servlet>-->
+
 </web-app>

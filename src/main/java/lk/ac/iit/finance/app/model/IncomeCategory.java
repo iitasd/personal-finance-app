@@ -4,6 +4,6 @@ public class IncomeCategory extends AbstractCategory {
 
     public IncomeCategory(String name, String userId) {
 
-        super(name, userId);
+        super(name, userId, CategoryType.INCOME);
     }
 }

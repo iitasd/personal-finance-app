@@ -1,3 +1,5 @@
+<%@ page import="lk.ac.iit.finance.app.model.AbstractCategory" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -66,7 +68,7 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <!-- Nav Item - Tables -->
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="transactions.jsp">
                 <i class="fas fa-fw fa-university"></i>
                 <span>Transactions</span></a>
@@ -80,7 +82,7 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item active" href="categories.jsp">List</a>
+                    <a class="collapse-item active" href="<%=request.getContextPath()%>/categories">List</a>
                     <a class="collapse-item" href="add-category.jsp">Add</a>
                 </div>
             </div>
@@ -163,10 +165,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <%
+                                    if (request.getAttribute("categories") != null) {
+                                        List<AbstractCategory> categories = (List<AbstractCategory>) request
+                                                .getAttribute("categories");
+                                        if (categories.size() > 0) {
+                                            for (AbstractCategory category : categories) {
+                                %>
                                 <tr>
-                                    <td>Salary</td>
-                                    <td>Monthly Salary</td>
-                                    <td>Income</td>
+                                    <td><%=category.getCategoryName()%>
+                                    </td>
+                                    <td><%=category.getDescription()%>
+                                    </td>
+                                    <td><%=category.getCategoryType()%>
+                                    </td>
                                     <th>
                                         <a href="#" class="btn btn-info btn-circle btn-sm">
                                             <i class="fas fa-edit"></i>
@@ -176,6 +188,12 @@
                                         </a>
                                     </th>
                                 </tr>
+                                <%
+                                            }
+                                        }
+                                        request.removeAttribute("categories");
+                                    }
+                                %>
                                 </tbody>
                             </table>
                         </div>

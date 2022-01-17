@@ -6,7 +6,7 @@ public class ExpenseCategory extends AbstractCategory {
 
     public ExpenseCategory(String name, String userId) {
 
-        super(name, userId);
+        super(name, userId, CategoryType.EXPENSE);
     }
 
     public void setBudget(Budget budget) {
