@@ -72,7 +72,11 @@
             <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Actions:</h6>
-                    <a class="collapse-item" href="<%=request.getContextPath()%>/transactions">List</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/transactions">Completed
+                        Transactions</a>
+                    <a class="collapse-item"
+                       href="<%=request.getContextPath()%>/recurring-transactions">Recurring Transactions
+                    </a>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/add-income">Add Income</a>
                     <a class="collapse-item" href="<%=request.getContextPath()%>/add-expense">Add Expense</a>
                 </div>

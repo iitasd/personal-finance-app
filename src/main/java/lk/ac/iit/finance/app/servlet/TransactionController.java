@@ -7,14 +7,10 @@ import lk.ac.iit.finance.app.model.ExpenseCategory;
 import lk.ac.iit.finance.app.model.IncomeCategory;
 import lk.ac.iit.finance.app.model.RecurringPeriod;
 import lk.ac.iit.finance.app.model.RecurringState;
-import lk.ac.iit.finance.app.model.Transaction;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = { "/transactions", "/add-income", "/add-expense" })
+@WebServlet(urlPatterns = { "/transactions", "/add-income", "/add-expense", "/recurring-transactions" })
 public class TransactionController extends HttpServlet {
 
     private static final long serialVersionUID = 4338446574324616595L;
@@ -52,6 +48,10 @@ public class TransactionController extends HttpServlet {
             req.setAttribute("transactionType", "Expense");
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
+        } else if ("/recurring-transactions".equals(action)) {
+            req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions());
+            RequestDispatcher dispatcher = req.getRequestDispatcher("recurring-transactions.jsp");
+            dispatcher.forward(req, resp);
         } else {
             req.setAttribute("transactions", TransactionManager.getInstance().getTransactions());
             RequestDispatcher dispatcher = req.getRequestDispatcher("transactions.jsp");
@@ -77,7 +77,7 @@ public class TransactionController extends HttpServlet {
         boolean isRecurring = "on".equals(req.getParameter("recurrence"));
         String frequency = "";
         int occurrenceCount = 0;
-        if(isRecurring) {
+        if (isRecurring) {
             frequency = req.getParameter("frequency");
             occurrenceCount = Integer.parseInt(req.getParameter("occurrenceCount"));
         }
@@ -96,8 +96,7 @@ public class TransactionController extends HttpServlet {
         } else if (transactionType.equalsIgnoreCase((CategoryType.INCOME.toString()))) {
             IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
-            TransactionManager.getInstance()
-                    .addIncome(amount, date, note, userId, incomeCategory, recurringState);
+            TransactionManager.getInstance().addIncome(amount, date, note, userId, incomeCategory, recurringState);
             req.setAttribute("msg", "Income added successfully!");
             req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
             req.setAttribute("transactionType", "Income");
