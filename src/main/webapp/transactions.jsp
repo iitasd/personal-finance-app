@@ -42,7 +42,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<%=request.getContextPath()%>/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh"></i>
             </div>
@@ -228,7 +228,8 @@
                                         }
                                     %>
                                     <td>
-                                        <a href="#" class="btn btn-info btn-circle btn-sm">
+                                        <a href="<%=request.getContextPath()%>/edit-transaction?transactionId=<%=transaction.getTransactionId()%>"
+                                           class="btn btn-info btn-circle btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger btn-circle btn-sm">

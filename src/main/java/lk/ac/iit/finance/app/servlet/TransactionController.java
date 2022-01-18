@@ -4,9 +4,11 @@ import lk.ac.iit.finance.app.manager.CategoryManager;
 import lk.ac.iit.finance.app.manager.TransactionManager;
 import lk.ac.iit.finance.app.model.CategoryType;
 import lk.ac.iit.finance.app.model.ExpenseCategory;
+import lk.ac.iit.finance.app.model.Income;
 import lk.ac.iit.finance.app.model.IncomeCategory;
 import lk.ac.iit.finance.app.model.RecurringPeriod;
 import lk.ac.iit.finance.app.model.RecurringState;
+import lk.ac.iit.finance.app.model.Transaction;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,7 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = { "/transactions", "/add-income", "/add-expense", "/recurring-transactions" })
+@WebServlet(urlPatterns = {
+        "/transactions", "/add-income", "/add-expense", "/recurring-transactions", "/edit-transaction"
+})
 public class TransactionController extends HttpServlet {
 
     private static final long serialVersionUID = 4338446574324616595L;
@@ -51,6 +55,19 @@ public class TransactionController extends HttpServlet {
         } else if ("/recurring-transactions".equals(action)) {
             req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions());
             RequestDispatcher dispatcher = req.getRequestDispatcher("recurring-transactions.jsp");
+            dispatcher.forward(req, resp);
+        } else if ("/edit-transaction".equals(action)) {
+            String transactionId = req.getParameter("transactionId");
+            Transaction transaction = TransactionManager.getInstance().getTransaction(transactionId);
+            req.setAttribute("transaction", transaction);
+            if (transaction instanceof Income) {
+                req.setAttribute("transactionType", "Income");
+            } else {
+                req.setAttribute("transactionType", "Expense");
+            }
+            req.setAttribute("action", "edit");
+            req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
+            RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
         } else {
             req.setAttribute("transactions", TransactionManager.getInstance().getTransactions());
