@@ -85,6 +85,8 @@ public class TransactionController extends HttpServlet {
             return;
         }
 
+        String transactionId = req.getParameter("transactionId");
+
         double amount = Double.parseDouble(req.getParameter("amount"));
         String transactionType = req.getParameter("transactionType");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
@@ -106,7 +108,7 @@ public class TransactionController extends HttpServlet {
             ExpenseCategory expenseCategory = CategoryManager.getInstance().getExpenseCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             if (isEdit) {
-                //TODO
+                TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
                 resp.sendRedirect("transactions");
             } else {
                 TransactionManager.getInstance().addExpense(amount, date, note, userId, expenseCategory, recurringState);
@@ -120,7 +122,7 @@ public class TransactionController extends HttpServlet {
             IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             if (isEdit) {
-                //TODO
+                TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
                 resp.sendRedirect("transactions");
             } else {
                 TransactionManager.getInstance().addIncome(amount, date, note, userId, incomeCategory, recurringState);
