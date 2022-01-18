@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="lk.ac.iit.finance.app.model.CategoryType" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="lk.ac.iit.finance.app.model.AbstractRecursiveTransaction" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -190,6 +191,8 @@
                                     <th>Start Date</th>
                                     <th>Category</th>
                                     <th>Note</th>
+                                    <th>Frequency</th>
+                                    <th>Occurrences</th>
                                     <th>Amount</th>
                                     <th>Operation</th>
                                 </tr>
@@ -197,11 +200,11 @@
                                 <tbody>
                                 <%
                                     if (request.getAttribute("transactions") != null) {
-                                        List<AbstractTransaction> transactions = (List<AbstractTransaction>) request
+                                        List<AbstractRecursiveTransaction> transactions = (List<AbstractRecursiveTransaction>) request
                                                 .getAttribute("transactions");
                                         if (transactions.size() > 0) {
                                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-                                            for (AbstractTransaction transaction : transactions) {
+                                            for (AbstractRecursiveTransaction transaction : transactions) {
                                 %>
                                 <tr>
                                     <td><%=transaction.getDate().format(formatter)%>
@@ -209,6 +212,10 @@
                                     <td><%=transaction.getCategory().getCategoryName()%>
                                     </td>
                                     <td><%=transaction.getNote()%>
+                                    </td>
+                                    <td><%=transaction.getRecurringPeriod().getPeriod().getValue()%>
+                                    </td>
+                                    <td><%=transaction.getRecurringPeriod().getOccurrenceCount()%>
                                     </td>
                                     <%
                                         if (CategoryType.INCOME.equals(transaction.getCategory().getCategoryType())) {

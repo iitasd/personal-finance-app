@@ -53,7 +53,7 @@ public class AbstractTransaction implements Transaction {
 
         this.amount = amount;
         this.date = date;
-        this.transactionId = getTransactionId();
+        this.userId = userId;
         this.transactionId = UUID.randomUUID().toString();
     }
 
