@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="lk.ac.iit.finance.app.model.Transaction" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="lk.ac.iit.finance.app.model.AbstractRecursiveTransaction" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -180,10 +181,13 @@
 
                 <%
                     boolean isEdit = false;
-                    Transaction transaction = null;
+                    boolean isRecurring = false;
+                    AbstractRecursiveTransaction transaction = null;
                     if ("edit".equals(request.getAttribute("action"))) {
                         isEdit = true;
-                        transaction = (Transaction) request.getAttribute("transaction");
+                        transaction = (AbstractRecursiveTransaction) request.getAttribute("transaction");
+                        isRecurring = transaction.getRecurringPeriod() != null && transaction.getRecurringPeriod()
+                                .isRecurring();
                     }
                 %>
                 <!-- Page Heading -->
@@ -295,7 +299,8 @@
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="recurrentSwitch"
-                                                       name="recurrence" <%=isEdit ? "disabled" : "" %>>
+                                                       name="recurrence" <%=isEdit ? "disabled" : ""%>
+                                                    <%=isRecurring ? "checked" : ""%>>
                                                 <label class="form-check-label" for="recurrentSwitch">Recurrent
                                                     event</label>
                                             </div>
@@ -304,23 +309,50 @@
                                     <div class="form-group row recurrence-group">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-select btn-user" style="width: 100%" name="frequency">
-                                                <option value="DAILY">Daily</option>
-                                                <option value="WEEKLY">Weekly</option>
+                                                <% if (isEdit & isRecurring) {
+                                                %>
+                                                <option value="Daily" <%="Daily".equalsIgnoreCase(
+                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
+                                                        "selected" :
+                                                        "" %>>Daily
+                                                </option>
+                                                <option value="Weekly" <%="Weekly".equalsIgnoreCase(
+                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
+                                                        "selected" :
+                                                        "" %>>Weekly
+                                                </option>
+                                                <option value="Monthly" <%="Monthly".equalsIgnoreCase(
+                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
+                                                        "selected" :
+                                                        "" %>>Monthly
+                                                </option>
+                                                <option value="Yearly" <%="Yearly".equalsIgnoreCase(
+                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
+                                                        "selected" :
+                                                        "" %>>Yearly
+                                                </option>
+                                                <%
+                                                } else { %>
+                                                <option value="Daily">Daily</option>
+                                                <option value="Weekly">Weekly</option>
                                                 <option value="Monthly">Monthly</option>
-                                                <option value="Monthly">Yearly</option>
+                                                <option value="Yearly">Yearly</option>
+                                                <% } %>
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control form-control-user"
                                                    id="occurrenceCount"
-                                                   placeholder="Occurrences" name="occurrenceCount">
+                                                   placeholder="Occurrences" name="occurrenceCount" value="<%=isEdit&isRecurring
+                                                    ? transaction.getRecurringPeriod().getOccurrenceCount() : ""%>">
                                         </div>
                                     </div>
                                     <input type="hidden" name="transactionType"
                                            value="<%=request.getAttribute("transactionType")%>">
-                                    <% if(isEdit) { %>
+                                    <% if (isEdit) { %>
                                     <input type="hidden" name="operation" value="edit">
-                                    <input type="hidden" name="transactionId" value="<%=transaction.getTransactionId()%>">
+                                    <input type="hidden" name="transactionId"
+                                           value="<%=transaction.getTransactionId()%>">
                                     <% } %>
                                     <button type="submit" class="btn btn-primary btn-user">
                                         <%=isEdit ? "Update" : "Create"%>
@@ -393,7 +425,9 @@
 <script>
     $(document).ready(function () {
         $('#datepicker').datepicker();
+        <% if(!isRecurring) {%>
         $('.recurrence-group').hide();
+        <% } %>
         $('#recurrentSwitch').change(function () {
             if (this.checked) {
                 $('.recurrence-group').show();
