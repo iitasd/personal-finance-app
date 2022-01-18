@@ -2,6 +2,7 @@ package lk.ac.iit.finance.app.servlet;
 
 import lk.ac.iit.finance.app.dao.UserDAO;
 import lk.ac.iit.finance.app.model.User;
+import lk.ac.iit.finance.app.util.CategoryUtil;
 
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -32,6 +33,7 @@ public class UserController extends HttpServlet {
                 .password(req.getParameter("password")).build();
 
         UserDAO.getInstance().registerUser(user);
+        CategoryUtil.addDefaultCategories(user.getUserId());
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("login.jsp");
         dispatcher.forward(req, resp);

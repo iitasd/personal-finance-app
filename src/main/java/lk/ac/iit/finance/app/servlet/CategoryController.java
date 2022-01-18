@@ -3,6 +3,7 @@ package lk.ac.iit.finance.app.servlet;
 import lk.ac.iit.finance.app.manager.CategoryManager;
 import lk.ac.iit.finance.app.model.AbstractCategory;
 import lk.ac.iit.finance.app.model.CategoryType;
+import lk.ac.iit.finance.app.util.CategoryUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = { "/categories", "/add-category", "/delete-category" })
+@WebServlet(urlPatterns = {"/categories", "/add-category", "/delete-category"})
 public class CategoryController extends HttpServlet {
 
     private static final long serialVersionUID = 1130564429969244567L;
@@ -81,5 +82,11 @@ public class CategoryController extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-category.jsp");
             dispatcher.forward(req, resp);
         }
+    }
+
+    @Override
+    public void init() {
+        String userId = "d9e43010-ac22-479a-bd40-74b79de17dc3";
+        CategoryUtil.addDefaultCategories(userId);
     }
 }
