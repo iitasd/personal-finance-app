@@ -1,6 +1,7 @@
 package lk.ac.iit.finance.app.manager;
 
 import lk.ac.iit.finance.app.model.Budget;
+import lk.ac.iit.finance.app.model.BudgetUsage;
 import lk.ac.iit.finance.app.model.ExpenseCategory;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ public class BudgetManager {
     private BudgetManager() {
 
     }
-
 
     public static BudgetManager getInstance() {
 
@@ -74,5 +74,24 @@ public class BudgetManager {
         return budgetList;
     }
 
+    public BudgetUsage getBudgetUsage(String categoryId, String userId) {
+        ExpenseCategory budget = getBudget(categoryId);
+        if (budget == null || budget.getBudget() == null) {
+            return new BudgetUsage();
+        } else if (budget.getUserId().equals(userId)) {
+            double currentUsage = TransactionManager.getInstance().getCurrentMonthUsage(userId, categoryId);
+            return new BudgetUsage(budget.getBudget().getMaxSpending(), currentUsage, categoryId, userId);
+        }
+        return new BudgetUsage();
+    }
+
+    public List<BudgetUsage> listBudgetUsages(String userId) {
+        List<BudgetUsage> budgetUsages = new ArrayList<>();
+        List<ExpenseCategory> allBudgetedCategories = getAllBudgetedCategories(userId);
+        for (ExpenseCategory expenseCategory : allBudgetedCategories) {
+            budgetUsages.add(getBudgetUsage(expenseCategory.getCategoryId(), userId));
+        }
+        return budgetUsages;
+    }
 
 }

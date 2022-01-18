@@ -92,7 +92,7 @@ public class TransactionManager {
         return false;
     }
 
-    private double getCurrentMonthUsage(String userId, String categoryId) {
+    public double getCurrentMonthUsage(String userId, String categoryId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
         for (Transaction transaction : transactions) {
@@ -269,6 +269,5 @@ public class TransactionManager {
                 }
             }
         }
-
     }
 }
