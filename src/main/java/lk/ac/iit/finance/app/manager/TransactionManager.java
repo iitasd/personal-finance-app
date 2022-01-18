@@ -49,6 +49,70 @@ public class TransactionManager {
         }
     }
 
+    public Transaction addExpense(double amount, LocalDate date, String note, String userId, ExpenseCategory category,
+                                  RecurringState recurringState) {
+
+        if (recurringState.isRecurring()) {
+            RecurringExpense recurringExpense = new RecurringExpense(amount, date, userId, recurringState);
+            recurringExpense.setCategory(category);
+            recurringExpense.setNote(note);
+            recursiveTransactions.add(recurringExpense);
+            processRecursiveTransactions(recurringExpense);
+            return recurringExpense;
+        } else {
+            Expense expense = new Expense(amount, date, userId);
+            expense.setCategory(category);
+            expense.setNote(note);
+            transactions.add(expense);
+            return expense;
+        }
+    }
+
+    public Transaction getTransaction(String id) {
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getTransactionId().equalsIgnoreCase(id)) {
+                return transaction;
+            }
+        }
+        return null;
+    }
+
+//    public Transaction editTransaction(String transactionId, double amount, Date date, String note,
+//                                       ExpenseCategory category, RecurringState recurringState) {
+
+//        Transaction transaction = this.getTransaction(transactionId);
+//        if (transaction != null) {
+//            transaction.setAmount(amount);
+//            transaction.setDate(date);
+//            transaction.setNote(note);
+//            transaction.setCategory(category);
+//            transaction.setRecurringState(recurringState);
+//            return transaction;
+//        } else {
+//            System.out.println("No transaction found with given ID: " + transactionId);
+//            return null;
+//        }
+//    }
+
+    public void deleteTransaction(String transactionId) {
+
+        Transaction transaction = this.getTransaction(transactionId);
+        if (transaction != null) {
+            transactions.remove(transaction);
+        } else {
+            System.out.println("No transaction found with given ID: " + transactionId);
+        }
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public List<Transaction> getRecursiveTransactions() {
+        return recursiveTransactions;
+    }
+
     private void processRecursiveTransactions(AbstractRecursiveTransaction recurringTransaction) {
         LocalDate startDate = recurringTransaction.getDate();
         if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
@@ -169,69 +233,5 @@ public class TransactionManager {
             }
         }
 
-    }
-
-    public Transaction addExpense(double amount, LocalDate date, String note, String userId, ExpenseCategory category,
-                                  RecurringState recurringState) {
-
-        if (recurringState.isRecurring()) {
-            RecurringExpense recurringExpense = new RecurringExpense(amount, date, userId, recurringState);
-            recurringExpense.setCategory(category);
-            recurringExpense.setNote(note);
-            recursiveTransactions.add(recurringExpense);
-            processRecursiveTransactions(recurringExpense);
-            return recurringExpense;
-        } else {
-            Expense expense = new Expense(amount, date, userId);
-            expense.setCategory(category);
-            expense.setNote(note);
-            transactions.add(expense);
-            return expense;
-        }
-    }
-
-    public Transaction getTransaction(String id) {
-
-        for (Transaction transaction : transactions) {
-            if (transaction.getTransactionId().equalsIgnoreCase(id)) {
-                return transaction;
-            }
-        }
-        return null;
-    }
-
-//    public Transaction editTransaction(String transactionId, double amount, Date date, String note,
-//                                       ExpenseCategory category, RecurringState recurringState) {
-
-//        Transaction transaction = this.getTransaction(transactionId);
-//        if (transaction != null) {
-//            transaction.setAmount(amount);
-//            transaction.setDate(date);
-//            transaction.setNote(note);
-//            transaction.setCategory(category);
-//            transaction.setRecurringState(recurringState);
-//            return transaction;
-//        } else {
-//            System.out.println("No transaction found with given ID: " + transactionId);
-//            return null;
-//        }
-//    }
-
-    public void deleteTransaction(String transactionId) {
-
-        Transaction transaction = this.getTransaction(transactionId);
-        if (transaction != null) {
-            transactions.remove(transaction);
-        } else {
-            System.out.println("No transaction found with given ID: " + transactionId);
-        }
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public List<Transaction> getRecursiveTransactions() {
-        return recursiveTransactions;
     }
 }
