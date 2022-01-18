@@ -171,6 +171,56 @@ public class TransactionManager {
         return recursiveTransactions;
     }
 
+    public void executeFutureRecursiveTransaction() {
+        LocalDate today = LocalDate.now();
+        for (Transaction recursiveTransaction : recursiveTransactions) {
+            if (recursiveTransaction instanceof RecursiveTransaction) {
+                RecurringState recurringPeriod = ((RecursiveTransaction) recursiveTransaction).getRecurringPeriod();
+                if (recurringPeriod.getNextExecutionDate().isEqual(today)) {
+                    if (recursiveTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
+                        Income income = new Income(recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId());
+                        income.setCategory(recursiveTransaction.getCategory());
+                        String note = "req_" + recursiveTransaction.getTransactionId();
+                        income.setNote(note);
+                        transactions.add(income);
+                        int occurrenceCount = recurringPeriod.getOccurrenceCount();
+                        if (occurrenceCount != 0) {
+                            recurringPeriod.setOccurrenceCount(occurrenceCount - 1);
+                            if (recurringPeriod.getPeriod().equals(RecurringPeriod.DAILY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusDays(1));
+                            } else if (recurringPeriod.getPeriod().equals(RecurringPeriod.WEEKLY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusWeeks(1));
+                            } else if (recurringPeriod.getPeriod().equals(RecurringPeriod.MONTHLY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusMonths(1));
+                            } else if (recurringPeriod.getPeriod().equals(RecurringPeriod.YEARLY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusYears(1));
+                            }
+                        }
+                    } else if (recursiveTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
+                        Expense expense = new Expense(recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId());
+                        expense.setCategory(recursiveTransaction.getCategory());
+                        String note = "req_" + recursiveTransaction.getTransactionId();
+                        expense.setNote(note);
+                        transactions.add(expense);
+                        int occurrenceCount = recurringPeriod.getOccurrenceCount();
+                        if (occurrenceCount != 0) {
+                            recurringPeriod.setOccurrenceCount(occurrenceCount - 1);
+                            if (recurringPeriod.getPeriod().equals(RecurringPeriod.DAILY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusDays(1));
+                            } else if (recurringPeriod.getPeriod().equals(RecurringPeriod.WEEKLY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusWeeks(1));
+                            } else if (recurringPeriod.getPeriod().equals(RecurringPeriod.MONTHLY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusMonths(1));
+                            } else if (recurringPeriod.getPeriod().equals(RecurringPeriod.YEARLY)) {
+                                recurringPeriod.setNextExecutionDate(today.plusYears(1));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private void processRecursiveTransactions(AbstractRecursiveTransaction recurringTransaction) {
         LocalDate startDate = recurringTransaction.getDate();
         if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
@@ -189,6 +239,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusDays(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
                 int i = 1;
@@ -205,6 +256,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusWeeks(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
                 int i = 1;
@@ -221,6 +273,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusMonths(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
                 int i = 1;
@@ -237,6 +290,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusYears(1));
                 }
             }
         } else if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
@@ -255,6 +309,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusDays(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
                 int i = 1;
@@ -271,6 +326,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusWeeks(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
                 int i = 1;
@@ -287,6 +343,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusMonths(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
                 int i = 1;
@@ -303,6 +360,7 @@ public class TransactionManager {
                     }
                     i++;
                     recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
+                    recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusYears(1));
                 }
             }
         }
