@@ -80,7 +80,7 @@ public class TransactionManager {
      */
     private boolean validateBudget(Expense expense) {
         ExpenseCategory budget = BudgetManager.getInstance().getBudget(expense.getCategory().getCategoryId());
-        if (budget == null) {
+        if (budget == null || budget.getBudget() == null) {
             return false;
         }
 
@@ -115,22 +115,19 @@ public class TransactionManager {
         return null;
     }
 
-//    public Transaction editTransaction(String transactionId, double amount, Date date, String note,
-//                                       ExpenseCategory category, RecurringState recurringState) {
+    public Transaction editTransaction(String transactionId, double amount, LocalDate date, String note) {
 
-//        Transaction transaction = this.getTransaction(transactionId);
-//        if (transaction != null) {
-//            transaction.setAmount(amount);
-//            transaction.setDate(date);
-//            transaction.setNote(note);
-//            transaction.setCategory(category);
-//            transaction.setRecurringState(recurringState);
-//            return transaction;
-//        } else {
-//            System.out.println("No transaction found with given ID: " + transactionId);
-//            return null;
-//        }
-//    }
+        Transaction transaction = this.getTransaction(transactionId);
+        if (transaction != null) {
+            transaction.setAmount(amount);
+            transaction.setDate(date);
+            transaction.setNote(note);
+            return transaction;
+        } else {
+            System.out.println("No transaction found with given ID: " + transactionId);
+            return null;
+        }
+    }
 
     public void deleteTransaction(String transactionId) {
 
