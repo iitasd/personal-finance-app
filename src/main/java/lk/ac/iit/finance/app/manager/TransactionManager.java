@@ -115,6 +115,30 @@ public class TransactionManager {
         return null;
     }
 
+    public Transaction getRecurringTransaction(String id) {
+
+        for (Transaction recursiveTransaction : recursiveTransactions) {
+            if (recursiveTransaction.getTransactionId().equalsIgnoreCase(id)) {
+                return recursiveTransaction;
+            }
+        }
+        return null;
+    }
+
+    public Transaction editRecurringTransaction(String transactionId, double amount, String note, RecurringState recurringState) {
+
+        Transaction transaction = this.getRecurringTransaction(transactionId);
+        if (transaction != null) {
+            transaction.setAmount(amount);
+            transaction.setNote(note);
+            ((RecursiveTransaction) transaction).setRecurringState(recurringState);
+            return transaction;
+        } else {
+            System.out.println("No recurring transaction found with given ID: " + transactionId);
+            return null;
+        }
+    }
+
     public Transaction editTransaction(String transactionId, double amount, LocalDate date, String note) {
 
         Transaction transaction = this.getTransaction(transactionId);
