@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = {"/categories", "/add-category", "/delete-category"})
-public class CategoryController extends HttpServlet {
+@WebListener
+public class CategoryController extends HttpServlet implements ServletContextListener {
 
     private static final long serialVersionUID = 1130564429969244567L;
 
@@ -85,8 +89,13 @@ public class CategoryController extends HttpServlet {
     }
 
     @Override
-    public void init() {
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
         String userId = "d9e43010-ac22-479a-bd40-74b79de17dc3";
         CategoryUtil.addDefaultCategories(userId);
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
     }
 }
