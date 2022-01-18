@@ -1,5 +1,7 @@
 <%@ page import="lk.ac.iit.finance.app.model.AbstractCategory" %>
 <%@ page import="java.util.List" %>
+<%@ page import="lk.ac.iit.finance.app.model.Transaction" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -176,17 +178,25 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
+                <%
+                    boolean isEdit = false;
+                    Transaction transaction = null;
+                    if ("edit".equals(request.getAttribute("action"))) {
+                        isEdit = true;
+                        transaction = (Transaction) request.getAttribute("transaction");
+                    }
+                %>
                 <!-- Page Heading -->
                 <%
                     if ("Income".equals(request.getAttribute("transactionType"))) {
                 %>
-                <h1 class="h3 mb-4 text-gray-800">Add Income</h1>
-                <p class="mb-4">Create new income</p>
+                <h1 class="h3 mb-4 text-gray-800"><%=isEdit ? "Edit" : "Add"%> Income</h1>
+                <p class="mb-4"><%=isEdit ? "Edit available" : "Create new"%> income</p>
                 <%
                 } else {
                 %>
-                <h1 class="h3 mb-4 text-gray-800">Add Expense</h1>
-                <p class="mb-4">Create new expense</p>
+                <h1 class="h3 mb-4 text-gray-800"><%=isEdit ? "Edit" : "Add"%> Expense</h1>
+                <p class="mb-4"><%=isEdit ? "Edit available" : "Create new"%> expense</p>
                 <%
                     }
                 %>
@@ -226,8 +236,19 @@
                                 <form class="user" action="<%=request.getContextPath()%>/transactions" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-select btn-user" style="width: 100%" name="category">
+                                            <select class="form-select btn-user" style="width: 100%" name="category"
+                                                    <%=isEdit ? "disabled" : ""%>>
+                                                <%
+                                                    if (isEdit) {
+                                                %>
+                                                <option value="<%=transaction.getCategory().getCategoryId()%>"
+                                                        selected><%=transaction.getCategory().getCategoryName()%>
+                                                </option>
+                                                <%
+                                                } else {
+                                                %>
                                                 <option selected>Category</option>
+                                                <% } %>
                                                 <%
                                                     if (request.getAttribute("categories") != null) {
                                                         List<AbstractCategory> categories = (List<AbstractCategory>) request
@@ -249,20 +270,24 @@
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control form-control-user"
                                                    id="amountInput"
-                                                   placeholder="Amount" name="amount">
+                                                   placeholder="Amount" name="amount"
+                                                   value="<%=isEdit ? transaction.getAmount() : ""%>">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <div class="input-group date">
                                                 <input type="text" class="form-control form-control-user"
-                                                       id="datepicker" placeholder="Date" name="date">
+                                                       id="datepicker" placeholder="Date" name="date"
+                                                       value="<%=isEdit ?
+                                                       transaction.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : ""%>">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control form-control-user"
                                                    id="noteInput"
-                                                   placeholder="Note" name="note">
+                                                   placeholder="Note" name="note" value="<%=isEdit ? transaction.getNote()
+                                                   : ""%>">
                                         </div>
                                     </div>
                                     <hr>
@@ -270,7 +295,7 @@
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="recurrentSwitch"
-                                                       name="recurrence">
+                                                       name="recurrence" <%=isEdit ? "disabled" : "" %>>
                                                 <label class="form-check-label" for="recurrentSwitch">Recurrent
                                                     event</label>
                                             </div>
@@ -293,8 +318,12 @@
                                     </div>
                                     <input type="hidden" name="transactionType"
                                            value="<%=request.getAttribute("transactionType")%>">
+                                    <% if(isEdit) { %>
+                                    <input type="hidden" name="operation" value="edit">
+                                    <input type="hidden" name="transactionId" value="<%=transaction.getTransactionId()%>">
+                                    <% } %>
                                     <button type="submit" class="btn btn-primary btn-user">
-                                        Create
+                                        <%=isEdit ? "Update" : "Create"%>
                                     </button>
                                 </form>
                             </div>
