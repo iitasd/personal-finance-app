@@ -25,4 +25,7 @@ public interface Transaction {
 
     void setNote(String note) ;
 
+    void setStatus(TransactionStatus status);
+
+    TransactionStatus getStatus();
 }

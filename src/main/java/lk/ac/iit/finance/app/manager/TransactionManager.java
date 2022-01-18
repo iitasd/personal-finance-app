@@ -63,9 +63,46 @@ public class TransactionManager {
             Expense expense = new Expense(amount, date, userId);
             expense.setCategory(category);
             expense.setNote(note);
+            boolean isBudgetOverUsed = validateBudget(expense);
             transactions.add(expense);
+            if (isBudgetOverUsed) {
+                expense.setStatus(TransactionStatus.BUDGET_OVER_USED);
+            }
             return expense;
         }
+    }
+
+    /**
+     * Validate the budget is overused. return true, if overused.
+     *
+     * @param expense expense.
+     * @return true if overused.
+     */
+    private boolean validateBudget(Expense expense) {
+        ExpenseCategory budget = BudgetManager.getInstance().getBudget(expense.getCategory().getCategoryId());
+        if (budget == null) {
+            return false;
+        }
+
+        double maxSpending = budget.getBudget().getMaxSpending();
+        double currentMonthUsage = getCurrentMonthUsage(expense.getUserId(), expense.getCategory().getCategoryId());
+        if (maxSpending <= currentMonthUsage) {
+            return true;
+        }
+        return false;
+    }
+
+    private double getCurrentMonthUsage(String userId, String categoryId) {
+        double amount = 0;
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        for (Transaction transaction : transactions) {
+            if (transaction.getUserId().equals(userId)
+                    && transaction.getCategory().getCategoryId().equals(categoryId)
+                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                amount = amount + transaction.getAmount();
+            }
+        }
+        return amount;
     }
 
     public Transaction getTransaction(String id) {

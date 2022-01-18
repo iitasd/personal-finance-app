@@ -12,6 +12,7 @@ public class AbstractTransaction implements Transaction {
     private String note;
     private String transactionId;
     private String userId;
+    private TransactionStatus status = TransactionStatus.SUCCESS;
 
     public void setAmount(Double amount) {
 
@@ -36,6 +37,16 @@ public class AbstractTransaction implements Transaction {
     public void setNote(String note) {
 
         this.note = note;
+    }
+
+    @Override
+    public void setStatus(TransactionStatus status) {
+        this.status = status;
+    }
+
+    @Override
+    public TransactionStatus getStatus() {
+        return status;
     }
 
     public AbstractTransaction(double amount, LocalDate date, String userId) {
