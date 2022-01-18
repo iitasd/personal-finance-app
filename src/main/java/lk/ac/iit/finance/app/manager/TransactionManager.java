@@ -182,11 +182,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
                     transactions.add(income);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
                 int i = 1;
@@ -196,11 +198,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
                     transactions.add(income);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
                 int i = 1;
@@ -210,11 +214,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
                     transactions.add(income);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
                 int i = 1;
@@ -224,11 +230,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
                     transactions.add(income);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             }
         } else if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
@@ -240,11 +248,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
                     transactions.add(expense);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
                 int i = 1;
@@ -254,11 +264,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
                     transactions.add(expense);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
                 int i = 1;
@@ -268,11 +280,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
                     transactions.add(expense);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
                 int i = 1;
@@ -282,11 +296,13 @@ public class TransactionManager {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
                     transactions.add(expense);
-                    if (i == recurringTransaction.getRecurringPeriod().getOccurrenceCount()) {
+                    int occurrenceCount = recurringTransaction.getRecurringPeriod().getOccurrenceCount();
+                    if (occurrenceCount == 0) {
                         //No need to further add transactions. Occurrence count is competed.
                         break;
                     }
                     i++;
+                    recurringTransaction.getRecurringPeriod().setOccurrenceCount(occurrenceCount - 1);
                 }
             }
         }
