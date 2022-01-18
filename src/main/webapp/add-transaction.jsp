@@ -3,6 +3,7 @@
 <%@ page import="lk.ac.iit.finance.app.model.Transaction" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="lk.ac.iit.finance.app.model.AbstractRecursiveTransaction" %>
+<%@ page import="lk.ac.iit.finance.app.model.RecursiveTransaction" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -182,12 +183,11 @@
                 <%
                     boolean isEdit = false;
                     boolean isRecurring = false;
-                    AbstractRecursiveTransaction transaction = null;
+                    Transaction transaction = null;
                     if ("edit".equals(request.getAttribute("action"))) {
                         isEdit = true;
-                        transaction = (AbstractRecursiveTransaction) request.getAttribute("transaction");
-                        isRecurring = transaction.getRecurringPeriod() != null && transaction.getRecurringPeriod()
-                                .isRecurring();
+                        transaction = (Transaction) request.getAttribute("transaction");
+                        isRecurring = "true".equals(request.getAttribute("recurring"));
                     }
                 %>
                 <!-- Page Heading -->
@@ -284,7 +284,8 @@
                                                 <input type="text" class="form-control form-control-user"
                                                        id="datepicker" placeholder="Date" name="date"
                                                        value="<%=isEdit ?
-                                                       transaction.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : ""%>">
+                                                       transaction.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) : ""%>"
+                                                    <%=isRecurring ? "disabled" : ""%>>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -312,24 +313,20 @@
                                                 <% if (isEdit & isRecurring) {
                                                 %>
                                                 <option value="Daily" <%="Daily".equalsIgnoreCase(
-                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
-                                                        "selected" :
-                                                        "" %>>Daily
+                                                        ((RecursiveTransaction) transaction).getRecurringPeriod()
+                                                                .getPeriod().getValue()) ? "selected" : "" %>>Daily
                                                 </option>
                                                 <option value="Weekly" <%="Weekly".equalsIgnoreCase(
-                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
-                                                        "selected" :
-                                                        "" %>>Weekly
+                                                        ((RecursiveTransaction) transaction).getRecurringPeriod()
+                                                                .getPeriod().getValue()) ? "selected" : "" %>>Weekly
                                                 </option>
                                                 <option value="Monthly" <%="Monthly".equalsIgnoreCase(
-                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
-                                                        "selected" :
-                                                        "" %>>Monthly
+                                                        ((RecursiveTransaction) transaction).getRecurringPeriod()
+                                                                .getPeriod().getValue()) ? "selected" : "" %>>Monthly
                                                 </option>
                                                 <option value="Yearly" <%="Yearly".equalsIgnoreCase(
-                                                        transaction.getRecurringPeriod().getPeriod().getValue()) ?
-                                                        "selected" :
-                                                        "" %>>Yearly
+                                                        ((RecursiveTransaction) transaction).getRecurringPeriod()
+                                                                .getPeriod().getValue()) ? "selected" : "" %>>Yearly
                                                 </option>
                                                 <%
                                                 } else { %>
@@ -344,7 +341,7 @@
                                             <input type="text" class="form-control form-control-user"
                                                    id="occurrenceCount"
                                                    placeholder="Occurrences" name="occurrenceCount" value="<%=isEdit&isRecurring
-                                                    ? transaction.getRecurringPeriod().getOccurrenceCount() : ""%>">
+                                                    ? ((RecursiveTransaction)transaction).getRecurringPeriod().getOccurrenceCount() : ""%>">
                                         </div>
                                     </div>
                                     <input type="hidden" name="transactionType"
@@ -353,7 +350,13 @@
                                     <input type="hidden" name="operation" value="edit">
                                     <input type="hidden" name="transactionId"
                                            value="<%=transaction.getTransactionId()%>">
-                                    <% } %>
+                                    <% if (isRecurring) { %>
+                                    <input type="hidden" name="recurrence" value="on">
+                                    <input type="hidden" name="date"
+                                           value="<%=transaction.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))%>">
+                                    <% }
+                                    }
+                                    %>
                                     <button type="submit" class="btn btn-primary btn-user">
                                         <%=isEdit ? "Update" : "Create"%>
                                     </button>

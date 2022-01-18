@@ -58,7 +58,14 @@ public class TransactionController extends HttpServlet {
             dispatcher.forward(req, resp);
         } else if ("/edit-transaction".equals(action)) {
             String transactionId = req.getParameter("transactionId");
-            Transaction transaction = TransactionManager.getInstance().getTransaction(transactionId);
+            boolean isRecurring = "true".equals(req.getParameter("recurring"));
+            Transaction transaction;
+            if (isRecurring) {
+                req.setAttribute("recurring", "true");
+                transaction = TransactionManager.getInstance().getRecurringTransaction(transactionId);
+            } else {
+                transaction = TransactionManager.getInstance().getTransaction(transactionId);
+            }
             req.setAttribute("transaction", transaction);
             if (transaction instanceof Income) {
                 req.setAttribute("transactionType", "Income");
@@ -108,10 +115,16 @@ public class TransactionController extends HttpServlet {
             ExpenseCategory expenseCategory = CategoryManager.getInstance().getExpenseCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             if (isEdit) {
-                TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
-                resp.sendRedirect("transactions");
+                if (recurringState.isRecurring()) {
+                    TransactionManager.getInstance().editRecurringTransaction(transactionId, amount, note, recurringState);
+                    resp.sendRedirect("recurring-transactions");
+                } else {
+                    TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
+                    resp.sendRedirect("transactions");
+                }
             } else {
-                TransactionManager.getInstance().addExpense(amount, date, note, userId, expenseCategory, recurringState);
+                TransactionManager.getInstance()
+                        .addExpense(amount, date, note, userId, expenseCategory, recurringState);
                 req.setAttribute("msg", "Expense added successfully!");
                 req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
                 req.setAttribute("transactionType", "Expense");
@@ -122,8 +135,13 @@ public class TransactionController extends HttpServlet {
             IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             if (isEdit) {
-                TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
-                resp.sendRedirect("transactions");
+                if (recurringState.isRecurring()) {
+                    TransactionManager.getInstance().editRecurringTransaction(transactionId, amount, note, recurringState);
+                    resp.sendRedirect("recurring-transactions");
+                } else {
+                    TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
+                    resp.sendRedirect("transactions");
+                }
             } else {
                 TransactionManager.getInstance().addIncome(amount, date, note, userId, incomeCategory, recurringState);
                 req.setAttribute("msg", "Income added successfully!");
