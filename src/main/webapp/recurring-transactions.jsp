@@ -1,4 +1,3 @@
-<%@ page import="lk.ac.iit.finance.app.model.AbstractTransaction" %>
 <%@ page import="java.util.List" %>
 <%@ page import="lk.ac.iit.finance.app.model.CategoryType" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
@@ -235,10 +234,10 @@
                                         }
                                     %>
                                     <td>
-                                        <a href="#" class="btn btn-info btn-circle btn-sm">
+                                        <a href="<%=request.getContextPath()%>/edit-transaction?transactionId=<%=transaction.getTransactionId()%>&recurring=true" class="btn btn-info btn-circle btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger btn-circle btn-sm">
+                                        <a href="" class="btn btn-danger btn-circle btn-sm">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>
