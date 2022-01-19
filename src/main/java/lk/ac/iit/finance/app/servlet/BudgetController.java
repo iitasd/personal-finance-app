@@ -1,8 +1,12 @@
 package lk.ac.iit.finance.app.servlet;
 
 import lk.ac.iit.finance.app.manager.BudgetManager;
+import lk.ac.iit.finance.app.model.BudgetUsage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,6 +44,11 @@ public class BudgetController extends HttpServlet {
             }
         }
         req.setAttribute("categories", budgetManager.getAllBudgetedCategories(userId));
+        List<BudgetUsage> budgetUsages = budgetManager.listBudgetUsages(userId);
+        if (budgetUsages.size() > 0) {
+            req.setAttribute("budgetUsage",
+                    budgetUsages.stream().collect(Collectors.toMap(BudgetUsage::getCategoryId, Function.identity())));
+        }
         RequestDispatcher dispatcher = req.getRequestDispatcher("budget.jsp");
         dispatcher.forward(req, resp);
     }

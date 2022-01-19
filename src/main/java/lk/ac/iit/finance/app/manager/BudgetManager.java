@@ -5,7 +5,9 @@ import lk.ac.iit.finance.app.model.BudgetUsage;
 import lk.ac.iit.finance.app.model.ExpenseCategory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BudgetManager {
     private static BudgetManager budgetManager;
@@ -76,20 +78,21 @@ public class BudgetManager {
 
     public BudgetUsage getBudgetUsage(String categoryId, String userId) {
         ExpenseCategory budget = getBudget(categoryId);
-        if (budget == null || budget.getBudget() == null) {
-            return new BudgetUsage();
-        } else if (budget.getUserId().equals(userId)) {
+        if (budget.getUserId().equals(userId)) {
             double currentUsage = TransactionManager.getInstance().getCurrentMonthUsage(userId, categoryId);
             return new BudgetUsage(budget.getBudget().getMaxSpending(), currentUsage, categoryId, userId);
         }
-        return new BudgetUsage();
+        return null;
     }
 
     public List<BudgetUsage> listBudgetUsages(String userId) {
         List<BudgetUsage> budgetUsages = new ArrayList<>();
         List<ExpenseCategory> allBudgetedCategories = getAllBudgetedCategories(userId);
         for (ExpenseCategory expenseCategory : allBudgetedCategories) {
-            budgetUsages.add(getBudgetUsage(expenseCategory.getCategoryId(), userId));
+            BudgetUsage budgetUsage = getBudgetUsage(expenseCategory.getCategoryId(), userId);
+            if(budgetUsage != null) {
+                budgetUsages.add(budgetUsage);
+            }
         }
         return budgetUsages;
     }

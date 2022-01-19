@@ -1,6 +1,9 @@
 <%@ page import="lk.ac.iit.finance.app.model.AbstractCategory" %>
 <%@ page import="java.util.List" %>
 <%@ page import="lk.ac.iit.finance.app.model.ExpenseCategory" %>
+<%@ page import="lk.ac.iit.finance.app.model.BudgetUsage" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Collections" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -187,8 +190,9 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Description</th>
                                     <th>Limit</th>
+                                    <th>Usage</th>
+                                    <th>Usage(&#37;)</th>
                                     <th>Operation</th>
                                 </tr>
                                 </thead>
@@ -197,16 +201,63 @@
                                     if (request.getAttribute("categories") != null) {
                                         List<ExpenseCategory> categories = (List<ExpenseCategory>) request
                                                 .getAttribute("categories");
+                                        Map<String, BudgetUsage> budgetUsageMap = Collections.emptyMap();
+                                        if (request.getAttribute("budgetUsage") != null) {
+                                            budgetUsageMap = (Map<String, BudgetUsage>) request
+                                                    .getAttribute("budgetUsage");
+                                        }
                                         if (categories.size() > 0) {
                                             for (ExpenseCategory category : categories) {
                                 %>
                                 <tr>
                                     <td><%=category.getCategoryName()%>
                                     </td>
-                                    <td><%=category.getDescription()%>
-                                    </td>
                                     <td><%=category.getBudget().getMaxSpending()%>
                                     </td>
+                                    <%
+                                        if (budgetUsageMap.get(category.getCategoryId()) != null) {
+                                    %>
+                                    <td><%=budgetUsageMap.get(category.getCategoryId()).getCurrentUsageAmount()%>
+                                    </td>
+                                    <td>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=budgetUsageMap.get(category.getCategoryId()).getUsagePercentage()%>%</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="progress progress-sm mr-2">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                         style="width: <%=budgetUsageMap.get(category.getCategoryId()).getUsagePercentage()%>%"
+                                                         aria-valuenow="<%=budgetUsageMap.get(category.getCategoryId()).getUsagePercentage()%>"
+                                                         aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <%
+                                    } else {
+                                    %>
+                                    <td>0</td>
+                                    <td>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">0%</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="progress progress-sm mr-2">
+                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                         style="width: 0%"
+                                                         aria-valuenow="0"
+                                                         aria-valuemin="0"
+                                                         aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <%
+                                        }
+                                    %>
                                     <th>
                                         <a href="<%=request.getContextPath()%>/delete-budget?categoryId=<%=category.getCategoryId()%>"
                                            class="btn btn-danger btn-circle btn-sm">
@@ -216,8 +267,7 @@
                                 </tr>
                                 <%
                                             }
-                                        }
-                                        request.removeAttribute("categories");
+                                        } request.removeAttribute("categories");
                                     }
                                 %>
                                 </tbody>
