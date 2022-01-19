@@ -105,6 +105,41 @@ public class TransactionManager {
         return amount;
     }
 
+    public double getCurrentMonthIncome(String userId) {
+        double amount = 0;
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        for (Transaction transaction : transactions) {
+            if (transaction instanceof Income && transaction.getUserId().equals(userId)
+                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                amount = amount + transaction.getAmount();
+            }
+        }
+        return amount;
+    }
+
+    public double getCurrentMonthExpense(String userId) {
+        double amount = 0;
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        for (Transaction transaction : transactions) {
+            if (transaction instanceof Expense && transaction.getUserId().equals(userId)
+                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                amount = amount + transaction.getAmount();
+            }
+        }
+        return amount;
+    }
+
+    public double getCurrentMonthBudgetStatus(String userId) {
+        double amount = 0;
+        double totalBudgetAmount = 0;
+        List<ExpenseCategory> allBudgetedCategories = BudgetManager.getInstance().getAllBudgetedCategories(userId);
+        for (ExpenseCategory expenseCategory : allBudgetedCategories) {
+            totalBudgetAmount = totalBudgetAmount + expenseCategory.getBudget().getMaxSpending();
+            amount = amount + getCurrentMonthUsage(userId, expenseCategory.getCategoryId());
+        }
+        return amount / totalBudgetAmount;
+    }
+
     public Transaction getTransaction(String id) {
 
         for (Transaction transaction : transactions) {
