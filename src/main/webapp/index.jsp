@@ -185,7 +185,9 @@
                                             Monthly Incomes
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">$<%=
-                                        request.getAttribute("income") != null ? request.getAttribute("income") : 0 %>
+                                        request.getAttribute("income") != null ?
+                                                String.valueOf(request.getAttribute("income")) :
+                                                "0" %>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -206,7 +208,8 @@
                                             Monthly Expenses
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">$<%=
-                                        request.getAttribute("expense") != null ? request.getAttribute("expense") : 0%>
+                                        request.getAttribute("expense") != null ?
+                                                String.valueOf(request.getAttribute("expense")) : "0"%>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -229,7 +232,7 @@
                                         </div>
                                         <%
                                             String budget = request.getAttribute("budget") != null ?
-                                                    (String) request.getAttribute("budget") :
+                                                    String.valueOf(request.getAttribute("budget")) :
                                                     "0";
                                         %>
                                         <div class="row no-gutters align-items-center">
@@ -264,7 +267,8 @@
                                             Monthly Balance
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">$<%=
-                                        request.getAttribute("balance") != null ? request.getAttribute("balance") : 0%>
+                                        request.getAttribute("balance") != null ?
+                                                String.valueOf(request.getAttribute("balance")) : "0"%>
                                         </div>
                                     </div>
                                     <div class="col-auto">

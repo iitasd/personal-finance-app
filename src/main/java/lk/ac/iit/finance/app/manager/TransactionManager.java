@@ -166,7 +166,7 @@ public class TransactionManager {
         if (totalBudgetAmount == 0) {
             return 0;
         }
-        return amount / totalBudgetAmount;
+        return (amount * 100) / totalBudgetAmount;
     }
 
     public Transaction getTransaction(String id) {

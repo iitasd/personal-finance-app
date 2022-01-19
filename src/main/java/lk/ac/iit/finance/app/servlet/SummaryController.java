@@ -44,7 +44,7 @@ public class SummaryController extends HttpServlet {
         req.setAttribute("expense", transactionManager.getCurrentMonthExpense(userId));
         req.setAttribute("income", transactionManager.getCurrentMonthIncome(userId));
         req.setAttribute("balance",
-                transactionManager.getCurrentMonthExpense(userId) - transactionManager.getCurrentMonthIncome(userId));
+                transactionManager.getCurrentMonthIncome(userId) - transactionManager.getCurrentMonthExpense(userId));
         RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
         dispatcher.forward(req, resp);
     }
