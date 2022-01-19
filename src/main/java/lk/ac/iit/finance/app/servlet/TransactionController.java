@@ -163,6 +163,31 @@ public class TransactionController extends HttpServlet {
             req.setAttribute("transactionType", "Expense");
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
+        } else if (transactionType.equalsIgnoreCase((CategoryType.INCOME.toString()))) {
+            IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
+            RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
+            if (isEdit) {
+                if (recurringState.isRecurring()) {
+                    TransactionManager.getInstance()
+                            .editRecurringTransaction(transactionId, amount, note, recurringState);
+                    resp.sendRedirect("recurring-transactions");
+                } else {
+                    TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
+                    resp.sendRedirect("transactions");
+                }
+            } else {
+                TransactionManager.getInstance().addIncome(amount, date, note, userId, incomeCategory, recurringState);
+                req.setAttribute("msg", "Income added successfully!");
+                req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
+                req.setAttribute("transactionType", "Income");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
+                dispatcher.forward(req, resp);
+            }
+        } else {
+            req.setAttribute("errorMsg", "Failed to add transaction!");
+            //TODO
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/transactions");
+            dispatcher.forward(req, resp);
         }
     }
 
