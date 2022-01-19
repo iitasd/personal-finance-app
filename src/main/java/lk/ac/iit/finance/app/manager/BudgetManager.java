@@ -78,7 +78,7 @@ public class BudgetManager {
 
     public BudgetUsage getBudgetUsage(String categoryId, String userId) {
         ExpenseCategory budget = getBudget(categoryId);
-        if (budget.getUserId().equals(userId)) {
+        if (budget != null && budget.getBudget() != null && budget.getUserId().equals(userId)) {
             double currentUsage = TransactionManager.getInstance().getCurrentMonthUsage(userId, categoryId);
             return new BudgetUsage(budget.getBudget().getMaxSpending(), currentUsage, categoryId, userId);
         }

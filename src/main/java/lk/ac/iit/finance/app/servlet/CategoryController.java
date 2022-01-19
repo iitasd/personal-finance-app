@@ -3,11 +3,14 @@ package lk.ac.iit.finance.app.servlet;
 import lk.ac.iit.finance.app.manager.CategoryManager;
 import lk.ac.iit.finance.app.model.AbstractCategory;
 import lk.ac.iit.finance.app.model.CategoryType;
+import lk.ac.iit.finance.app.task.TransactionScheduler;
 import lk.ac.iit.finance.app.util.CategoryUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -92,6 +95,9 @@ public class CategoryController extends HttpServlet implements ServletContextLis
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         String userId = "d9e43010-ac22-479a-bd40-74b79de17dc3";
         CategoryUtil.addDefaultCategories(userId);
+        TransactionScheduler transactionScheduler = new TransactionScheduler();
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(transactionScheduler, TimeUnit.MINUTES.toMillis(1), TimeUnit.DAYS.toMillis(1));
     }
 
     @Override
