@@ -237,6 +237,17 @@
                                         request.removeAttribute("msg");
                                     }
                                 %>
+                                <%
+                                    if (request.getAttribute("warnMsg") != null) {
+                                %>
+                                <div class="text-center">
+                                    <h2 class="h5 text-warning mb-4"><%=request.getAttribute("warnMsg")%>
+                                    </h2>
+                                </div>
+                                <%
+                                        request.removeAttribute("warnMsg");
+                                    }
+                                %>
                                 <form class="user" action="<%=request.getContextPath()%>/transactions" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">

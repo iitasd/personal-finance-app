@@ -1,7 +1,9 @@
 package lk.ac.iit.finance.app.servlet;
 
+import lk.ac.iit.finance.app.manager.BudgetManager;
 import lk.ac.iit.finance.app.manager.CategoryManager;
 import lk.ac.iit.finance.app.manager.TransactionManager;
+import lk.ac.iit.finance.app.model.BudgetUsage;
 import lk.ac.iit.finance.app.model.CategoryType;
 import lk.ac.iit.finance.app.model.ExpenseCategory;
 import lk.ac.iit.finance.app.model.Income;
@@ -144,36 +146,22 @@ public class TransactionController extends HttpServlet {
             } else {
                 TransactionManager.getInstance()
                         .addExpense(amount, date, note, userId, expenseCategory, recurringState);
-                req.setAttribute("msg", "Expense added successfully!");
-                req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
-                req.setAttribute("transactionType", "Expense");
-                RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
-                dispatcher.forward(req, resp);
-            }
-        } else if (transactionType.equalsIgnoreCase((CategoryType.INCOME.toString()))) {
-            IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
-            RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
-            if (isEdit) {
-                if (recurringState.isRecurring()) {
-                    TransactionManager.getInstance()
-                            .editRecurringTransaction(transactionId, amount, note, recurringState);
-                    resp.sendRedirect("recurring-transactions");
-                } else {
-                    TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
-                    resp.sendRedirect("transactions");
+                BudgetUsage budgetUsage = BudgetManager.getInstance()
+                        .getBudgetUsage(expenseCategory.getCategoryId(), userId);
+                if (budgetUsage != null) {
+                    if (budgetUsage.getUsagePercentage() >= 100) {
+                        req.setAttribute("warnMsg", "You have exceeded the allocated budget!");
+                    } else if (budgetUsage.getUsagePercentage() >= 80) {
+                        req.setAttribute("warnMsg",
+                                "You have reached " + budgetUsage.getUsagePercentage() + "% of the allocated budget!");
+                    }
                 }
-            } else {
-                TransactionManager.getInstance().addIncome(amount, date, note, userId, incomeCategory, recurringState);
-                req.setAttribute("msg", "Income added successfully!");
-                req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
-                req.setAttribute("transactionType", "Income");
-                RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
-                dispatcher.forward(req, resp);
+
             }
-        } else {
-            req.setAttribute("errorMsg", "Failed to add transaction!");
-            //TODO
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/transactions");
+            req.setAttribute("msg", "Expense added successfully!");
+            req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
+            req.setAttribute("transactionType", "Expense");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
         }
     }
