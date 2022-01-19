@@ -3,6 +3,7 @@ package lk.ac.iit.finance.app.servlet;
 import lk.ac.iit.finance.app.manager.TransactionManager;
 
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +45,8 @@ public class SummaryController extends HttpServlet {
         req.setAttribute("income", transactionManager.getCurrentMonthIncome(userId));
         req.setAttribute("balance",
                 transactionManager.getCurrentMonthExpense(userId) - transactionManager.getCurrentMonthIncome(userId));
+        RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
+        dispatcher.forward(req, resp);
     }
 
 }

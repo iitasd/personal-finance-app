@@ -48,7 +48,7 @@
 
         <!-- Nav Item - Summary -->
         <li class="nav-item active">
-            <a class="nav-link" href="index.jsp">
+            <a class="nav-link" href="<%=request.getContextPath()%>/summary">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Summary</span></a>
         </li>
@@ -182,9 +182,11 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Incomes (Monthly)
+                                            Monthly Incomes
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$100,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$<%=
+                                        request.getAttribute("income") != null ? request.getAttribute("income") : 0 %>
+                                        </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -201,9 +203,11 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                            Expenses (Monthly)
+                                            Monthly Expenses
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$100,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$<%=
+                                        request.getAttribute("expense") != null ? request.getAttribute("expense") : 0%>
+                                        </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -219,12 +223,17 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Budget
-                                            Status (Monthly)
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Monthly
+                                            Budget
+                                            Status
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=
+                                                request.getAttribute("budget") != null ?
+                                                        request.getAttribute("budget") :
+                                                        0 %>%
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <div class="progress progress-sm mr-2">
@@ -250,9 +259,11 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                            Balance
+                                            Monthly Balance
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$100,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$<%=
+                                        request.getAttribute("balance") != null ? request.getAttribute("balance") : 0%>
+                                        </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
