@@ -234,10 +234,12 @@
                                         }
                                     %>
                                     <td>
-                                        <a href="<%=request.getContextPath()%>/edit-transaction?transactionId=<%=transaction.getTransactionId()%>&recurring=true" class="btn btn-info btn-circle btn-sm">
+                                        <a href="<%=request.getContextPath()%>/edit-transaction?transactionId=<%=transaction.getTransactionId()%>&recurring=true"
+                                           class="btn btn-info btn-circle btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="" class="btn btn-danger btn-circle btn-sm">
+                                        <a href="<%=request.getContextPath()%>/delete-transaction?transactionId=<%=transaction.getTransactionId()%>&recurring=true"
+                                           class="btn btn-danger btn-circle btn-sm">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>

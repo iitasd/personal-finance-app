@@ -23,7 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = {
-        "/transactions", "/add-income", "/add-expense", "/recurring-transactions", "/edit-transaction"
+        "/transactions", "/add-income", "/add-expense", "/recurring-transactions", "/edit-transaction",
+        "/delete-transaction"
 })
 public class TransactionController extends HttpServlet {
 
@@ -76,6 +77,23 @@ public class TransactionController extends HttpServlet {
             req.setAttribute("categories", categoryManager.getIncomeCategoryList(userId));
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
+        } else if ("/delete-transaction".equals(action)) {
+            String transactionId = req.getParameter("transactionId");
+            boolean isRecurring = "true".equals(req.getParameter("recurring"));
+            if (transactionId != null && !transactionId.trim().isEmpty()) {
+                if (isRecurring) {
+                    TransactionManager.getInstance().deleteRecurringTransaction(transactionId);
+                    req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions());
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("recurring-transactions.jsp");
+                    dispatcher.forward(req, resp);
+                } else {
+                    TransactionManager.getInstance().deleteTransaction(transactionId);
+                    req.setAttribute("transactions", TransactionManager.getInstance().getTransactions());
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("transactions.jsp");
+                    dispatcher.forward(req, resp);
+                }
+            }
+
         } else {
             req.setAttribute("transactions", TransactionManager.getInstance().getTransactions());
             RequestDispatcher dispatcher = req.getRequestDispatcher("transactions.jsp");
@@ -116,7 +134,8 @@ public class TransactionController extends HttpServlet {
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             if (isEdit) {
                 if (recurringState.isRecurring()) {
-                    TransactionManager.getInstance().editRecurringTransaction(transactionId, amount, note, recurringState);
+                    TransactionManager.getInstance()
+                            .editRecurringTransaction(transactionId, amount, note, recurringState);
                     resp.sendRedirect("recurring-transactions");
                 } else {
                     TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);
@@ -136,7 +155,8 @@ public class TransactionController extends HttpServlet {
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
             if (isEdit) {
                 if (recurringState.isRecurring()) {
-                    TransactionManager.getInstance().editRecurringTransaction(transactionId, amount, note, recurringState);
+                    TransactionManager.getInstance()
+                            .editRecurringTransaction(transactionId, amount, note, recurringState);
                     resp.sendRedirect("recurring-transactions");
                 } else {
                     TransactionManager.getInstance().editTransaction(transactionId, amount, date, note);

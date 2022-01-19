@@ -163,6 +163,16 @@ public class TransactionManager {
         }
     }
 
+    public void deleteRecurringTransaction(String transactionId) {
+
+        Transaction transaction = this.getRecurringTransaction(transactionId);
+        if (transaction != null) {
+            recursiveTransactions.remove(transaction);
+        } else {
+            System.out.println("No transaction found with given ID: " + transactionId);
+        }
+    }
+
     public List<Transaction> getTransactions() {
         return transactions;
     }
