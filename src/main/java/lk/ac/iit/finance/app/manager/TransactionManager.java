@@ -163,6 +163,9 @@ public class TransactionManager {
             totalBudgetAmount = totalBudgetAmount + expenseCategory.getBudget().getMaxSpending();
             amount = amount + getCurrentMonthUsage(userId, expenseCategory.getCategoryId());
         }
+        if (totalBudgetAmount == 0) {
+            return 0;
+        }
         return amount / totalBudgetAmount;
     }
 
