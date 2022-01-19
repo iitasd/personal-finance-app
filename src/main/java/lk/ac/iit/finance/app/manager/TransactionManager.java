@@ -97,6 +97,8 @@ public class TransactionManager {
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
         for (Transaction transaction : transactions) {
             if (transaction.getUserId().equals(userId)
+                    && transaction.getCategory() !=null
+                    && transaction.getCategory().getCategoryId() !=null
                     && transaction.getCategory().getCategoryId().equals(categoryId)
                     && firstDayOfMonth.isBefore(transaction.getDate())) {
                 amount = amount + transaction.getAmount();
