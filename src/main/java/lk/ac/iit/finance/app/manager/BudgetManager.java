@@ -5,9 +5,7 @@ import lk.ac.iit.finance.app.model.BudgetUsage;
 import lk.ac.iit.finance.app.model.ExpenseCategory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BudgetManager {
     private static BudgetManager budgetManager;
