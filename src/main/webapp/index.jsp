@@ -227,8 +227,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Monthly
-                                            Budget
-                                            Status
+                                            Budget Status
                                         </div>
                                         <%
                                             String budget = request.getAttribute("budget") != null ?
@@ -290,12 +289,12 @@
                             <!-- Card Header - Dropdown -->
                             <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Finance Overview</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Monthly Finance Overview</h6>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
+                                    <canvas id="monthlyChart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -398,7 +397,7 @@
         data: {
             labels: ["Income", "Expense"],
             datasets: [{
-                data: [55, 45],
+                data: [<%=request.getAttribute("chartIncome")%>, <%=request.getAttribute("chartExpense")%>],
                 backgroundColor: ['#1cc88a', '#e74a3b'],
                 hoverBackgroundColor: ['#1cc88a', '#e74a3b'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
@@ -421,6 +420,107 @@
             },
             cutoutPercentage: 80,
         },
+    });
+
+    var ctx = document.getElementById("monthlyChart");
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [<%=request.getAttribute("dateArray")%>],
+            datasets: [{
+                label: "Earnings",
+                lineTension: 0.3,
+                borderColor: "rgba(78, 115, 223, 1)",
+                pointRadius: 3,
+                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointBorderColor: "rgba(78, 115, 223, 1)",
+                pointHoverRadius: 3,
+                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                data: [<%=request.getAttribute("incomeArray")%>],
+            }, {
+                label: "Expenses",
+                lineTension: 0.3,
+                borderColor: "rgba(241,15,66,1)",
+                pointRadius: 3,
+                pointBackgroundColor: "rgba(241,15,66,1)",
+                pointBorderColor: "rgba(241,15,66,1)",
+                pointHoverRadius: 3,
+                pointHoverBackgroundColor: "rgba(241,15,66,1)",
+                pointHoverBorderColor: "rgba(241,15,66,1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                data: [<%=request.getAttribute("expenseArray")%>],
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0
+                }
+            },
+            scales: {
+                xAxes: [{
+                    time: {
+                        unit: 'date'
+                    },
+                    gridLines: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        maxTicksLimit: 7
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        maxTicksLimit: 5,
+                        padding: 10,
+                        // Include a dollar sign in the ticks
+                        callback: function(value, index, values) {
+                            return '$' + number_format(value);
+                        }
+                    },
+                    gridLines: {
+                        color: "rgb(234, 236, 244)",
+                        zeroLineColor: "rgb(234, 236, 244)",
+                        drawBorder: false,
+                        borderDash: [2],
+                        zeroLineBorderDash: [2]
+                    }
+                }],
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                titleMarginBottom: 10,
+                titleFontColor: '#6e707e',
+                titleFontSize: 14,
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                intersect: false,
+                mode: 'index',
+                caretPadding: 10,
+                callbacks: {
+                    label: function(tooltipItem, chart) {
+                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                        return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                    }
+                }
+            }
+        }
     });
 </script>
 
