@@ -5,6 +5,7 @@ import lk.ac.iit.finance.app.model.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransactionManager {
 
@@ -240,8 +241,16 @@ public class TransactionManager {
         return transactions;
     }
 
+    public List<Transaction> getTransactions(String userId) {
+        return transactions.stream().filter(t -> t.getUserId().equals(userId)).collect(Collectors.toList());
+    }
+
     public List<Transaction> getRecursiveTransactions() {
         return recursiveTransactions;
+    }
+
+    public List<Transaction> getRecursiveTransactions(String userId) {
+        return recursiveTransactions.stream().filter(t -> t.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
     public void executeFutureRecursiveTransaction() {

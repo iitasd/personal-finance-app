@@ -56,7 +56,7 @@ public class TransactionController extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
             dispatcher.forward(req, resp);
         } else if ("/recurring-transactions".equals(action)) {
-            req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions());
+            req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions(userId));
             RequestDispatcher dispatcher = req.getRequestDispatcher("recurring-transactions.jsp");
             dispatcher.forward(req, resp);
         } else if ("/edit-transaction".equals(action)) {
@@ -85,19 +85,19 @@ public class TransactionController extends HttpServlet {
             if (transactionId != null && !transactionId.trim().isEmpty()) {
                 if (isRecurring) {
                     TransactionManager.getInstance().deleteRecurringTransaction(transactionId);
-                    req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions());
+                    req.setAttribute("transactions", TransactionManager.getInstance().getRecursiveTransactions(userId));
                     RequestDispatcher dispatcher = req.getRequestDispatcher("recurring-transactions.jsp");
                     dispatcher.forward(req, resp);
                 } else {
                     TransactionManager.getInstance().deleteTransaction(transactionId);
-                    req.setAttribute("transactions", TransactionManager.getInstance().getTransactions());
+                    req.setAttribute("transactions", TransactionManager.getInstance().getTransactions(userId));
                     RequestDispatcher dispatcher = req.getRequestDispatcher("transactions.jsp");
                     dispatcher.forward(req, resp);
                 }
             }
 
         } else {
-            req.setAttribute("transactions", TransactionManager.getInstance().getTransactions());
+            req.setAttribute("transactions", TransactionManager.getInstance().getTransactions(userId));
             RequestDispatcher dispatcher = req.getRequestDispatcher("transactions.jsp");
             dispatcher.forward(req, resp);
         }
