@@ -1,13 +1,13 @@
 package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class RecurringIncome extends AbstractRecursiveTransaction {
 
-    public RecurringIncome(double amount, LocalDate date, String userId, RecurringState recurringState) {
+    public RecurringIncome(double amount, LocalDate date, String userId, RecurringState recurringState,
+                           TransactionCategory transactionCategory) {
 
-        super(amount, date, userId, recurringState);
+        super(amount, date, userId, recurringState,transactionCategory );
     }
 
     public void setCategory(TransactionCategory category) {

@@ -49,12 +49,13 @@ public class AbstractTransaction implements Transaction {
         return status;
     }
 
-    public AbstractTransaction(double amount, LocalDate date, String userId) {
+    public AbstractTransaction(double amount, LocalDate date, String userId, TransactionCategory transactionCategory) {
 
         this.amount = amount;
         this.date = date;
         this.userId = userId;
         this.transactionId = UUID.randomUUID().toString();
+        this.category = transactionCategory;
     }
 
     @Override

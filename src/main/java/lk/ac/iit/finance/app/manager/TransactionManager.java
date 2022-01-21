@@ -34,15 +34,13 @@ public class TransactionManager {
                                  RecurringState recurringState) {
 
         if (recurringState.isRecurring()) {
-            RecurringIncome recurringIncome = new RecurringIncome(amount, date, userId, recurringState);
-            recurringIncome.setCategory(category);
+            RecurringIncome recurringIncome = new RecurringIncome(amount, date, userId, recurringState, category);
             recurringIncome.setNote(note);
             recursiveTransactions.add(recurringIncome);
             processRecursiveTransactions(recurringIncome);
             return recurringIncome;
         } else {
-            Income income = new Income(amount, date, userId);
-            income.setCategory(category);
+            Income income = new Income(amount, date, userId, category);
             income.setNote(note);
             transactions.add(income);
             return income;
@@ -53,15 +51,13 @@ public class TransactionManager {
                                   RecurringState recurringState) {
 
         if (recurringState.isRecurring()) {
-            RecurringExpense recurringExpense = new RecurringExpense(amount, date, userId, recurringState);
-            recurringExpense.setCategory(category);
+            RecurringExpense recurringExpense = new RecurringExpense(amount, date, userId, recurringState, category);
             recurringExpense.setNote(note);
             recursiveTransactions.add(recurringExpense);
             processRecursiveTransactions(recurringExpense);
             return recurringExpense;
         } else {
-            Expense expense = new Expense(amount, date, userId);
-            expense.setCategory(category);
+            Expense expense = new Expense(amount, date, userId, category);
             expense.setNote(note);
             boolean isBudgetOverUsed = validateBudget(expense);
             transactions.add(expense);
@@ -97,8 +93,8 @@ public class TransactionManager {
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
         for (Transaction transaction : transactions) {
             if (transaction.getUserId().equals(userId)
-                    && transaction.getCategory() !=null
-                    && transaction.getCategory().getCategoryId() !=null
+                    && transaction.getCategory() != null
+                    && transaction.getCategory().getCategoryId() != null
                     && transaction.getCategory().getCategoryId().equals(categoryId)
                     && firstDayOfMonth.isBefore(transaction.getDate())) {
                 amount = amount + transaction.getAmount();
@@ -191,7 +187,8 @@ public class TransactionManager {
         return null;
     }
 
-    public Transaction editRecurringTransaction(String transactionId, double amount, String note, RecurringState recurringState) {
+    public Transaction editRecurringTransaction(String transactionId, double amount, String note,
+                                                RecurringState recurringState) {
 
         Transaction transaction = this.getRecurringTransaction(transactionId);
         if (transaction != null) {
@@ -254,7 +251,8 @@ public class TransactionManager {
                 RecurringState recurringPeriod = ((RecursiveTransaction) recursiveTransaction).getRecurringPeriod();
                 if (recurringPeriod.getNextExecutionDate().isEqual(today)) {
                     if (recursiveTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
-                        Income income = new Income(recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId());
+                        Income income = new Income(recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId(),
+                                recursiveTransaction.getCategory());
                         income.setCategory(recursiveTransaction.getCategory());
                         String note = "req_" + recursiveTransaction.getTransactionId();
                         income.setNote(note);
@@ -273,7 +271,8 @@ public class TransactionManager {
                             }
                         }
                     } else if (recursiveTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
-                        Expense expense = new Expense(recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId());
+                        Expense expense = new Expense(recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId(),
+                                recursiveTransaction.getCategory());
                         expense.setCategory(recursiveTransaction.getCategory());
                         String note = "req_" + recursiveTransaction.getTransactionId();
                         expense.setNote(note);
@@ -303,7 +302,8 @@ public class TransactionManager {
             if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
-                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     income.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
@@ -320,7 +320,8 @@ public class TransactionManager {
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
-                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     income.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
@@ -337,7 +338,8 @@ public class TransactionManager {
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
-                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     income.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
@@ -354,7 +356,8 @@ public class TransactionManager {
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
-                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Income income = new Income(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     income.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     income.setNote(note);
@@ -373,7 +376,8 @@ public class TransactionManager {
             if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
-                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     expense.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
@@ -390,7 +394,8 @@ public class TransactionManager {
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
-                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     expense.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
@@ -407,7 +412,8 @@ public class TransactionManager {
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
-                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     expense.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);
@@ -424,7 +430,8 @@ public class TransactionManager {
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
-                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId());
+                    Expense expense = new Expense(recurringTransaction.getAmount(), date, recurringTransaction.getUserId(),
+                            recurringTransaction.getCategory());
                     expense.setCategory(recurringTransaction.getCategory());
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
                     expense.setNote(note);

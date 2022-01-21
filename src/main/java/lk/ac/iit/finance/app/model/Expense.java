@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class Expense extends AbstractTransaction {
 
-    public Expense(double amount, LocalDate date, String userId) {
+    public Expense(double amount, LocalDate date, String userId, TransactionCategory transactionCategory) {
 
-        super(amount, date, userId);
+        super(amount, date, userId, transactionCategory);
     }
 
     public void setCategory(TransactionCategory category) {
