@@ -5,9 +5,9 @@ import java.time.LocalDate;
 public class RecurringExpense extends AbstractRecursiveTransaction {
 
     public RecurringExpense(double amount, LocalDate date, String userId, RecurringState recurringState,
-                            TransactionCategory transactionCategory) {
+                            TransactionCategory transactionCategory, String note) {
 
-        super(amount, date, userId, recurringState, transactionCategory);
+        super(amount, date, userId, recurringState, transactionCategory, note);
     }
 
     public void setCategory(TransactionCategory category) {

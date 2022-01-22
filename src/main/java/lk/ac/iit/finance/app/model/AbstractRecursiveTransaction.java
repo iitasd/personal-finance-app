@@ -8,8 +8,8 @@ public class AbstractRecursiveTransaction extends AbstractTransaction implements
     private RecurringState recurringState;
 
     public AbstractRecursiveTransaction(double amount, LocalDate date, String userId, RecurringState recurringState,
-                                        TransactionCategory transactionCategory) {
-        super(amount, date, userId, transactionCategory);
+                                        TransactionCategory transactionCategory, String note) {
+        super(amount, date, userId, transactionCategory, note);
         this.recurringState = recurringState;
     }
 

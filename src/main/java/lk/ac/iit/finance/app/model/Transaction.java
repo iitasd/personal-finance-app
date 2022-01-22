@@ -1,7 +1,6 @@
 package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public interface Transaction {
 
