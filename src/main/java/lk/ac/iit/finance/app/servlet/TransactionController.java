@@ -156,13 +156,12 @@ public class TransactionController extends HttpServlet {
                                 "You have reached " + budgetUsage.getUsagePercentage() + "% of the allocated budget!");
                     }
                 }
-
+                req.setAttribute("msg", "Expense added successfully!");
+                req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
+                req.setAttribute("transactionType", "Expense");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
+                dispatcher.forward(req, resp);
             }
-            req.setAttribute("msg", "Expense added successfully!");
-            req.setAttribute("categories", categoryManager.getExpenseCategoryList(userId));
-            req.setAttribute("transactionType", "Expense");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("add-transaction.jsp");
-            dispatcher.forward(req, resp);
         } else if (transactionType.equalsIgnoreCase((CategoryType.INCOME.toString()))) {
             IncomeCategory incomeCategory = CategoryManager.getInstance().getIncomeCategory(categoryId);
             RecurringState recurringState = getRecurringState(isRecurring, frequency, occurrenceCount);
