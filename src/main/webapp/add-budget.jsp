@@ -209,7 +209,6 @@
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-select btn-user" style="width: 100%" name="category">
-                                                <option selected>Category</option>
                                                 <%
                                                     if (request.getAttribute("categories") != null) {
                                                         List<AbstractCategory> categories = (List<AbstractCategory>) request

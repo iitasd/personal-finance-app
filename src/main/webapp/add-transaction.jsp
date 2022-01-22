@@ -260,10 +260,8 @@
                                                         selected><%=transaction.getCategory().getCategoryName()%>
                                                 </option>
                                                 <%
-                                                } else {
+                                                }
                                                 %>
-                                                <option selected>Category</option>
-                                                <% } %>
                                                 <%
                                                     if (request.getAttribute("categories") != null) {
                                                         List<AbstractCategory> categories = (List<AbstractCategory>) request
