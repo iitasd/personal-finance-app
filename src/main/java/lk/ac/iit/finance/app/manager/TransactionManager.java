@@ -95,7 +95,8 @@ public class TransactionManager {
     public double getCurrentMonthUsage(String userId, String categoryId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+        for (Transaction transaction : userTransactions) {
             if (transaction.getUserId().equals(userId)
                     && transaction.getCategory() != null
                     && transaction.getCategory().getCategoryId() != null
@@ -110,9 +111,10 @@ public class TransactionManager {
     public double getCurrentMonthIncome(String userId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Income && transaction.getUserId().equals(userId)
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
@@ -122,9 +124,11 @@ public class TransactionManager {
     public double getCurrentMonthExpense(String userId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Expense && transaction.getUserId().equals(userId)
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
@@ -134,10 +138,12 @@ public class TransactionManager {
     public double getMonthlyExpenseToDate(String userId, LocalDate date) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Expense && transaction.getUserId().equals(userId)
                     && date.isAfter(transaction.getDate())
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
@@ -147,10 +153,12 @@ public class TransactionManager {
     public double getMonthlyIncomeToDate(String userId, LocalDate date) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Income && transaction.getUserId().equals(userId)
                     && date.isAfter(transaction.getDate())
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
@@ -168,7 +176,8 @@ public class TransactionManager {
         if (totalBudgetAmount == 0) {
             return 0;
         }
-        return (amount * 100) / totalBudgetAmount;
+        double amountToRound = amount * 100/totalBudgetAmount;
+        return Math.round(amountToRound * 100.0)/100.0;
     }
 
     public Transaction getTransaction(String id) {
@@ -261,7 +270,7 @@ public class TransactionManager {
         for (Transaction recursiveTransaction : recursiveTransactions) {
             if (recursiveTransaction instanceof RecursiveTransaction) {
                 AbstractTransactionFactory abstractTransactionFactory = TransactionFactoryProducer
-                        .getFactory(((RecursiveTransaction) recursiveTransaction).getRecurringPeriod());
+                        .getFactory(null);
 
                 RecurringState recurringPeriod = ((RecursiveTransaction) recursiveTransaction).getRecurringPeriod();
                 if (recurringPeriod.getNextExecutionDate().isEqual(today)) {
@@ -319,7 +328,7 @@ public class TransactionManager {
     private void processRecursiveTransactions(AbstractRecursiveTransaction recurringTransaction) {
         LocalDate startDate = recurringTransaction.getDate();
         AbstractTransactionFactory abstractTransactionFactory = TransactionFactoryProducer
-                .getFactory(recurringTransaction.getRecurringPeriod());
+                .getFactory(null);
         if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
             if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
                 int i = 1;

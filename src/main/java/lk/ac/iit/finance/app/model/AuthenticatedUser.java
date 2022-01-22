@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 public class AuthenticatedUser implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1747422469571724488L;
     private String userId;
 
     private String username;
