@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 public class CategoryManager {
 
     private static CategoryManager categoryManager;
-    public List<IncomeCategory> incomeCategoryList;
-    public List<ExpenseCategory> expenseCategoryList;
+    private List<IncomeCategory> incomeCategoryList;
+    private List<ExpenseCategory> expenseCategoryList;
 
     private CategoryManager() {
 
