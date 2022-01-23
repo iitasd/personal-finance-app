@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Transaction controller servlet.
+ */
 @WebServlet(urlPatterns = {
         "/transactions", "/add-income", "/add-expense", "/recurring-transactions", "/edit-transaction",
         "/delete-transaction"

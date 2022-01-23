@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * The income model
+ */
 public class Income extends AbstractTransaction {
 
     public Income(double amount, LocalDate date, String userId, TransactionCategory transactionCategory, String note) {

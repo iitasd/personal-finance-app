@@ -2,10 +2,12 @@ package lk.ac.iit.finance.app.model;
 
 import java.io.Serializable;
 
+/**
+ * Authentication user model
+ */
 public class AuthenticatedUser implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1747422469571724488L;
     private String userId;
 
     private String username;

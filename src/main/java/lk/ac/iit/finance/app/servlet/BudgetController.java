@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Budget controller servlet.
+ */
 @WebServlet(urlPatterns = { "/budgets", "/add-budget", "/delete-budget" })
 public class BudgetController extends HttpServlet {
 

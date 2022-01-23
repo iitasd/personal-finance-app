@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This is used to manage the transaction related operations.
+ */
 public class TransactionManager {
 
     private final List<Transaction> transactions;
@@ -31,6 +34,17 @@ public class TransactionManager {
         return transactionManager;
     }
 
+    /**
+     * Add an income
+     *
+     * @param amount         Amount
+     * @param date           Effective date
+     * @param note           Note
+     * @param userId         User ID
+     * @param category       Category type
+     * @param recurringState Recurring state
+     * @return
+     */
     public Transaction addIncome(double amount, LocalDate date, String note, String userId, IncomeCategory category,
                                  RecurringState recurringState) {
 
@@ -48,6 +62,17 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Add an expense
+     *
+     * @param amount         Amount
+     * @param date           Effective date
+     * @param note           Note
+     * @param userId         User ID
+     * @param category       Category type
+     * @param recurringState Recurring state
+     * @return
+     */
     public Transaction addExpense(double amount, LocalDate date, String note, String userId, ExpenseCategory category,
                                   RecurringState recurringState) {
 
@@ -92,10 +117,18 @@ public class TransactionManager {
         return false;
     }
 
+    /**
+     * Get current month usage of a category
+     *
+     * @param userId     userId
+     * @param categoryId category id
+     * @return
+     */
     public double getCurrentMonthUsage(String userId, String categoryId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+        for (Transaction transaction : userTransactions) {
             if (transaction.getUserId().equals(userId)
                     && transaction.getCategory() != null
                     && transaction.getCategory().getCategoryId() != null
@@ -107,56 +140,95 @@ public class TransactionManager {
         return amount;
     }
 
+    /**
+     * Get current month total income
+     *
+     * @param userId User ID
+     * @return
+     */
     public double getCurrentMonthIncome(String userId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Income && transaction.getUserId().equals(userId)
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
         return amount;
     }
 
+    /**
+     * Get current month total expense
+     *
+     * @param userId user id
+     * @return
+     */
     public double getCurrentMonthExpense(String userId) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Expense && transaction.getUserId().equals(userId)
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
         return amount;
     }
 
+    /**
+     * GEt monthly expense to a selected given date.
+     *
+     * @param userId user id
+     * @param date   Date
+     * @return
+     */
     public double getMonthlyExpenseToDate(String userId, LocalDate date) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Expense && transaction.getUserId().equals(userId)
                     && date.isAfter(transaction.getDate())
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
         return amount;
     }
 
+    /**
+     * GEt monthly income to a selected given date.
+     *
+     * @param userId user id
+     * @param date   Date
+     * @return
+     */
     public double getMonthlyIncomeToDate(String userId, LocalDate date) {
         double amount = 0;
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        for (Transaction transaction : transactions) {
+        List<Transaction> userTransactions = new UserTransactionFilter(userId).filterTransactions(transactions);
+
+        for (Transaction transaction : userTransactions) {
             if (transaction instanceof Income && transaction.getUserId().equals(userId)
                     && date.isAfter(transaction.getDate())
-                    && firstDayOfMonth.isBefore(transaction.getDate())) {
+                    && (firstDayOfMonth.isBefore(transaction.getDate()) || firstDayOfMonth.isEqual(transaction.getDate()))) {
                 amount = amount + transaction.getAmount();
             }
         }
         return amount;
     }
 
+    /**
+     * Get the current month overall budget usage as a percentage.
+     *
+     * @param userId user Id.
+     * @return
+     */
     public double getCurrentMonthBudgetStatus(String userId) {
         double amount = 0;
         double totalBudgetAmount = 0;
@@ -168,9 +240,16 @@ public class TransactionManager {
         if (totalBudgetAmount == 0) {
             return 0;
         }
-        return (amount * 100) / totalBudgetAmount;
+        double amountToRound = amount * 100 / totalBudgetAmount;
+        return Math.round(amountToRound * 100.0) / 100.0;
     }
 
+    /**
+     * Get a transaction
+     *
+     * @param id Id
+     * @return
+     */
     public Transaction getTransaction(String id) {
 
         for (Transaction transaction : transactions) {
@@ -181,6 +260,12 @@ public class TransactionManager {
         return null;
     }
 
+    /**
+     * GEt a recurring transaction.
+     *
+     * @param id Id.
+     * @return
+     */
     public Transaction getRecurringTransaction(String id) {
 
         for (Transaction recursiveTransaction : recursiveTransactions) {
@@ -191,6 +276,15 @@ public class TransactionManager {
         return null;
     }
 
+    /**
+     * Edit a recurring transaction.
+     *
+     * @param transactionId  Transaction Id
+     * @param amount         Amount
+     * @param note           Note
+     * @param recurringState Reccuring State
+     * @return
+     */
     public Transaction editRecurringTransaction(String transactionId, double amount, String note,
                                                 RecurringState recurringState) {
 
@@ -206,6 +300,15 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Edit a transaction.
+     *
+     * @param transactionId Transaction Id
+     * @param amount        Amount
+     * @param date          Date
+     * @param note          Note
+     * @return
+     */
     public Transaction editTransaction(String transactionId, double amount, LocalDate date, String note) {
 
         Transaction transaction = this.getTransaction(transactionId);
@@ -220,6 +323,11 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Delte a transaction
+     *
+     * @param transactionId transaction id
+     */
     public void deleteTransaction(String transactionId) {
 
         Transaction transaction = this.getTransaction(transactionId);
@@ -230,6 +338,11 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Delte a recurring transaction.
+     *
+     * @param transactionId
+     */
     public void deleteRecurringTransaction(String transactionId) {
 
         Transaction transaction = this.getRecurringTransaction(transactionId);
@@ -256,15 +369,19 @@ public class TransactionManager {
         return recursiveTransactions.stream().filter(t -> t.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
+    /**
+     * This is used to excecute the future configured recurring transactions.
+     */
     public void executeFutureRecursiveTransaction() {
         LocalDate today = LocalDate.now();
         for (Transaction recursiveTransaction : recursiveTransactions) {
             if (recursiveTransaction instanceof RecursiveTransaction) {
                 AbstractTransactionFactory abstractTransactionFactory = TransactionFactoryProducer
-                        .getFactory(((RecursiveTransaction) recursiveTransaction).getRecurringPeriod());
+                        .getFactory(null);
 
                 RecurringState recurringPeriod = ((RecursiveTransaction) recursiveTransaction).getRecurringPeriod();
                 if (recurringPeriod.getNextExecutionDate().isEqual(today)) {
+                    // If an income
                     if (recursiveTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
                         String note = "req_" + recursiveTransaction.getTransactionId();
 
@@ -289,6 +406,7 @@ public class TransactionManager {
                             }
                         }
                     } else if (recursiveTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
+                        // if an expense
                         String note = "req_" + recursiveTransaction.getTransactionId();
                         Transaction expense = abstractTransactionFactory.getTransaction(true,
                                 recursiveTransaction.getAmount(), today, recursiveTransaction.getUserId(),
@@ -319,9 +437,10 @@ public class TransactionManager {
     private void processRecursiveTransactions(AbstractRecursiveTransaction recurringTransaction) {
         LocalDate startDate = recurringTransaction.getDate();
         AbstractTransactionFactory abstractTransactionFactory = TransactionFactoryProducer
-                .getFactory(recurringTransaction.getRecurringPeriod());
+                .getFactory(null);
         if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.INCOME)) {
             if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
+                // if a daily income
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -341,6 +460,7 @@ public class TransactionManager {
                     recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusDays(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
+                //if a weekly income
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -360,6 +480,7 @@ public class TransactionManager {
                     recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusWeeks(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
+                // if a monthly income
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -379,6 +500,7 @@ public class TransactionManager {
                     recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusMonths(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
+                //if a yearly income
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -400,6 +522,7 @@ public class TransactionManager {
             }
         } else if (recurringTransaction.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
             if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.DAILY)) {
+                //if a daily expense
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusDays(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -419,6 +542,7 @@ public class TransactionManager {
                     recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusDays(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.WEEKLY)) {
+                //if a weekly expense
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusWeeks(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -438,6 +562,7 @@ public class TransactionManager {
                     recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusWeeks(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.MONTHLY)) {
+                //if a monthly expense
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusMonths(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;
@@ -457,6 +582,7 @@ public class TransactionManager {
                     recurringTransaction.getRecurringPeriod().setNextExecutionDate(date.plusMonths(1));
                 }
             } else if (recurringTransaction.getRecurringPeriod().getPeriod().equals(RecurringPeriod.YEARLY)) {
+                // if a yearly expense
                 int i = 1;
                 for (LocalDate date = startDate; date.isBefore(LocalDate.now()); date = date.plusYears(1)) {
                     String note = "req_" + recurringTransaction.getTransactionId() + "_" + i;

@@ -1,7 +1,8 @@
 package lk.ac.iit.finance.app.model;
 
-import java.util.UUID;
-
+/**
+ * Transaction category mode.
+ */
 public interface TransactionCategory {
     String getCategoryId();
 

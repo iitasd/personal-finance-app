@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Abstract Transaction model
+ */
 public class AbstractTransaction implements Transaction {
 
     private Double amount;

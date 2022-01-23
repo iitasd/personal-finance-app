@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * Transaction interface.
+ */
 public interface Transaction {
 
     String getTransactionId();

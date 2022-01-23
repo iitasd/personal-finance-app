@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ *  Recurring transaction factory class.
+ */
 public class RecurringTransactionFactory extends AbstractTransactionFactory {
     private RecurringState recurringState;
 

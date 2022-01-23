@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.util.UUID;
 
+/**
+ * The Abstract category model.
+ */
 public abstract class AbstractCategory implements TransactionCategory {
 
     private String categoryName;

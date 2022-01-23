@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Category controller servlet.
+ */
 @WebServlet(urlPatterns = {"/categories", "/add-category", "/delete-category"})
 @WebListener
 public class CategoryController extends HttpServlet implements ServletContextListener {

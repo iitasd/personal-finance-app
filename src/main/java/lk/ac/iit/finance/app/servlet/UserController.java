@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * User controller servlet.
+ */
 @WebServlet("/register")
 public class UserController extends HttpServlet {
 

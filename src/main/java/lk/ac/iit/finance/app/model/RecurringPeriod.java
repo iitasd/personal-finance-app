@@ -1,5 +1,8 @@
 package lk.ac.iit.finance.app.model;
 
+/**
+ * Recurring period enum
+ */
 public enum RecurringPeriod {
     DAILY("daily"),
     WEEKLY("weekly"),
