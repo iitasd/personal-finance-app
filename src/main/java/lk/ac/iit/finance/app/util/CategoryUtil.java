@@ -2,8 +2,15 @@ package lk.ac.iit.finance.app.util;
 
 import lk.ac.iit.finance.app.manager.CategoryManager;
 
+/**
+ * The category utility class.
+ */
 public class CategoryUtil {
 
+    /**
+     * Add default categories
+     * @param userId userid
+     */
     public static void addDefaultCategories(String userId) {
         CategoryManager.getInstance().addIncomeCategory("Salary",
                 "Monthly Salary", userId, true);

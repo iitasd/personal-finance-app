@@ -1,5 +1,8 @@
 package lk.ac.iit.finance.app.model;
 
+/**
+ * The budget model
+ */
 public class Budget {
 
     private double maxSpending;

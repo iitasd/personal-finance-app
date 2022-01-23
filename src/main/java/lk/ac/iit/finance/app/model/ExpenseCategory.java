@@ -1,5 +1,8 @@
 package lk.ac.iit.finance.app.model;
 
+/**
+ * The expense category model
+ */
 public class ExpenseCategory extends AbstractCategory {
 
     private Budget budget;

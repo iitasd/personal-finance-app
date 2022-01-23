@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * The Abstract recurring transaction model
+ */
 public class AbstractRecursiveTransaction extends AbstractTransaction implements RecursiveTransaction {
 
 

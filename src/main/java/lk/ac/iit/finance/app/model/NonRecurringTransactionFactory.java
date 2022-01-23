@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * Non recurring transaction factory class.
+ */
 public class NonRecurringTransactionFactory extends AbstractTransactionFactory {
 
     @Override

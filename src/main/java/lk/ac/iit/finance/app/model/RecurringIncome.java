@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * Recurring income model
+ */
 public class RecurringIncome extends AbstractRecursiveTransaction {
 
     public RecurringIncome(double amount, LocalDate date, String userId, RecurringState recurringState,

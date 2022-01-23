@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Finance datasource class.
+ */
 public class FinanceDataSource {
 
     private static final FinanceDataSource INSTANCE = new FinanceDataSource();

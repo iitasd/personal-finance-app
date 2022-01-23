@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * Recurring state of a transaction.
+ */
 public class RecurringState {
 
     private boolean isRecurring;

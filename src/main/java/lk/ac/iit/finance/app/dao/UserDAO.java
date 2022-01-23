@@ -12,6 +12,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * This class is used to do the user operations in the DB.
+ */
 public class UserDAO {
 
     private static final UserDAO INSTANCE = new UserDAO();
@@ -25,6 +28,10 @@ public class UserDAO {
         return INSTANCE;
     }
 
+    /**
+     * Register a new user
+     * @param user user.
+     */
     public void registerUser(User user) {
 
         user.setUserId(UUID.randomUUID().toString());
@@ -39,10 +46,16 @@ public class UserDAO {
             preparedStatement.setString(5, user.getLastName());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error while registering: " + ex);
         }
     }
 
+    /**
+     * Authenticate a user.
+     * @param username username
+     * @param password password
+     * @return Authenticated user
+     */
     public Optional<AuthenticatedUser> authenticate(String username, char[] password) {
 
         try (Connection connection = FinanceDataSource.getInstance().getConnection()) {
@@ -60,7 +73,7 @@ public class UserDAO {
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error while authenticating: " + ex);
         }
         return Optional.empty();
     }

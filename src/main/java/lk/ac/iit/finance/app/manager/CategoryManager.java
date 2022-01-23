@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * This is used to manager the category related operations.
+ */
 public class CategoryManager {
 
     private static CategoryManager categoryManager;
@@ -34,25 +37,36 @@ public class CategoryManager {
         return categoryManager;
     }
 
+    /**
+     * Get income category list
+     *
+     * @param userId user id
+     * @return
+     */
     public List<IncomeCategory> getIncomeCategoryList(String userId) {
         return incomeCategoryList.stream().filter(e -> e.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
-    public void setIncomeCategoryList(List<IncomeCategory> incomeCategoryList) {
-
-        this.incomeCategoryList = incomeCategoryList;
-    }
-
+    /**
+     * Get expense category list
+     *
+     * @param userId userid
+     * @return
+     */
     public List<ExpenseCategory> getExpenseCategoryList(String userId) {
 
         return expenseCategoryList.stream().filter(e -> e.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
-    public void setExpenseCategoryList(List<ExpenseCategory> expenseCategoryList) {
-
-        this.expenseCategoryList = expenseCategoryList;
-    }
-
+    /**
+     * Add an income category
+     *
+     * @param categoryName category name
+     * @param description  description
+     * @param userId       userId
+     * @param isSystem     isSystem category
+     * @return
+     */
     public IncomeCategory addIncomeCategory(String categoryName, String description, String userId, boolean isSystem) {
 
         IncomeCategory incomeCategory = new IncomeCategory(categoryName, userId);
@@ -62,8 +76,17 @@ public class CategoryManager {
         return incomeCategory;
     }
 
+    /**
+     * Add an expense category
+     *
+     * @param categoryName category name
+     * @param description  description
+     * @param userId       userId
+     * @param isSystem     isSystem category
+     * @return
+     */
     public ExpenseCategory addExpenseCategory(String categoryName, String description, String userId, boolean isSystem,
-            Budget budget) {
+                                              Budget budget) {
 
         ExpenseCategory expenseCategory = new ExpenseCategory(categoryName, userId);
         expenseCategory.setDescription(description);
@@ -73,6 +96,12 @@ public class CategoryManager {
         return expenseCategory;
     }
 
+    /**
+     * get an expense category
+     *
+     * @param id category id
+     * @return
+     */
     public ExpenseCategory getExpenseCategory(String id) {
 
         for (ExpenseCategory expenseCategory : expenseCategoryList) {
@@ -83,6 +112,12 @@ public class CategoryManager {
         return null;
     }
 
+    /**
+     * get an income category
+     *
+     * @param id income id
+     * @return
+     */
     public IncomeCategory getIncomeCategory(String id) {
 
         for (IncomeCategory incomeCategory : incomeCategoryList) {
@@ -94,7 +129,7 @@ public class CategoryManager {
     }
 
     public IncomeCategory updateIncomeCategory(String incomeId, String categoryName, String description,
-            boolean isSystem) {
+                                               boolean isSystem) {
 
         IncomeCategory incomeCategory = this.getIncomeCategory(incomeId);
         if (incomeCategory != null) {
@@ -109,8 +144,18 @@ public class CategoryManager {
 
     }
 
+    /**
+     * Update expense category
+     *
+     * @param expenseId    expense id
+     * @param categoryName category name
+     * @param description  description
+     * @param isSystem     is a system category
+     * @param budget       budget
+     * @return
+     */
     public ExpenseCategory updateExpenseCategory(String expenseId, String categoryName, String description,
-            boolean isSystem, Budget budget) {
+                                                 boolean isSystem, Budget budget) {
 
         ExpenseCategory expenseCategory = this.getExpenseCategory(expenseId);
         if (expenseCategory != null) {
@@ -126,6 +171,12 @@ public class CategoryManager {
 
     }
 
+    /**
+     * Delete a category
+     *
+     * @param categoryId category id
+     * @param userId     user id
+     */
     public void deleteCategory(String categoryId, String userId) {
 
         Optional<IncomeCategory> incomeCategory = incomeCategoryList.stream()

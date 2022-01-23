@@ -1,5 +1,8 @@
 package lk.ac.iit.finance.app.model;
 
+/**
+ * The budget usage model
+ */
 public class BudgetUsage {
 
     private double budgetedAmount;

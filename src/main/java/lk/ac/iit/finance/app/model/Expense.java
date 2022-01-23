@@ -2,6 +2,9 @@ package lk.ac.iit.finance.app.model;
 
 import java.time.LocalDate;
 
+/**
+ * The expense model
+ */
 public class Expense extends AbstractTransaction {
 
     public Expense(double amount, LocalDate date, String userId, TransactionCategory transactionCategory, String note) {
